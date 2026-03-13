@@ -68,5 +68,14 @@ TagManager:
   - name: Enemygun
     uniqueID: 2657591897
     locked: 0
+  - name: New Layer 9
+    uniqueID: 3275661323
+    locked: 0
+  - name: New Layer 10
+    uniqueID: 1652672589
+    locked: 0
+  - name: Boss
+    uniqueID: 1628835687
+    locked: 0
   m_RenderingLayers:
   - Default

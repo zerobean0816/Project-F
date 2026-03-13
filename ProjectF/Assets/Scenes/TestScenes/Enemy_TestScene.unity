@@ -1190,7 +1190,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 02edc363281773b4b8fbe9181633d63f, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1263,7 +1263,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 0000000025218e5641314ba99dc001f419596c901f863329efbe62a6ff5364e159a2679e
+  m_ApplyToSortingLayers: 0000000025218e5641314ba99dc001f419596c901f863329efbe62a6ff5364e159a2679e0ba03ec34dc88162670f1661
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -3027,8 +3027,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1628835687
+  m_SortingLayer: 11
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
@@ -3821,6 +3821,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3948920803786540915, guid: fe70e19386c005b44a6d04cbdb755569, type: 3}
+      propertyPath: maxAmmo
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5056669485122258049, guid: fe70e19386c005b44a6d04cbdb755569, type: 3}
       propertyPath: m_Name
       value: PlayerMain
@@ -3881,10 +3885,6 @@ PrefabInstance:
     - target: {fileID: 4288807175556387004, guid: 7ba43512830018746be299b170151b49, type: 3}
       propertyPath: m_Name
       value: Destroyable
-      objectReference: {fileID: 0}
-    - target: {fileID: 4288807175556387004, guid: 7ba43512830018746be299b170151b49, type: 3}
-      propertyPath: m_Layer
-      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6765090172403777527, guid: 7ba43512830018746be299b170151b49, type: 3}
       propertyPath: m_LocalPosition.x

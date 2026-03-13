@@ -44,7 +44,7 @@ public class EnemyGun : MonoBehaviour
     {
         if (currentTime <= 0)
         {
-            Debug.Log("EnemyGun : Spawning Bullet");
+            //Debug.Log("EnemyGun : Spawning Bullet");
             Shoot();
             currentTime = fireRate;
         }

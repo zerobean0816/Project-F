@@ -1,21 +1,21 @@
 using System.Collections;
-using Unity.VectorGraphics;
+
 using UnityEngine;
-using UnityEngine.Rendering;
+
 
 public class ShotGun : MonoBehaviour
 {   
     [SerializeField] float shootStrength = 30;
-    [SerializeField] int maxAmmo = 4;
+    [SerializeField] int maxAmmo = 3;
 
     [SerializeField] GameObject bullet1;
     [SerializeField] GameObject bullet2;
     [SerializeField] GameObject bullet3;
 
-    public bool isPressed;
-    public Vector2 KnockBackForce {get; private set;}
 
     GameObject player;
+    public Vector2 KnockBackForce {get; private set;}
+    public bool isPressed;
     private int _currentBullet;
     public int currentBullet
     {
@@ -29,15 +29,15 @@ public class ShotGun : MonoBehaviour
             _currentBullet = Mathf.Clamp(value, 0, maxAmmo);
             if (_currentBullet <= 0)
             {
-                isShootable = false;
+                isPressed = false;
             }
             else
             {
-                isShootable = true;
+                isPressed = true;
             }
         }
     }
-    private bool isShootable;
+    private bool isReloading;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -47,75 +47,50 @@ public class ShotGun : MonoBehaviour
         {
             Debug.Log("[ShotGun] : Player is NULL in GmaeManger.PlayerManager");
         }
-
+        isReloading = false;
         currentBullet = maxAmmo;
     }
 
     // Update is called once per frame
-    void Update()
+    void GunUpdate()
     {
-        if (Input.GetMouseButtonDown(0) && isShootable)
+        if (Input.GetMouseButtonDown(0) && !isReloading && currentBullet > 0)
         {
+            SetKnockBackForce();
             isPressed = true;
             currentBullet --;
-            Shoot();
             GameManager.Instance.uIManager.SetBulletCount(currentBullet);
         }
-        else if (!isShootable)
+
+        if (currentBullet <= 0)
         {
-            ReloadOnTime(.5f);
+            StartCoroutine(ReloadOnTime(0.5f));
         }
 
         ShowBulletByCount();
     }
 
-    void Shoot()
-    {
-        //Debug.Log("Shotgun Shotted!");
-        if (isPressed && isShootable)
-        {
-            Debug.Log($"[ShootGun] : BulletCount = {currentBullet}");
-            SetKnockBackForce();
-        }
-    }
     
     void ShowBulletByCount()
     {
-        if (currentBullet == 1)
-        {
-            bullet1.SetActive(true);
-
-            bullet2.SetActive(false);
-            bullet3.SetActive(false);
-        }
-        else if (currentBullet == 2)
-        {
-            bullet1.SetActive(true);
-            bullet2.SetActive(true);
-
-            bullet3.SetActive(false);
-        }
-        else if (currentBullet == 3)
-        {
-            bullet1.SetActive(true);
-            bullet2.SetActive(true);
-            bullet3.SetActive(true);
-        }
-
-        else
-        {
-            bullet1.SetActive(false);
-            bullet2.SetActive(false);
-            bullet3.SetActive(false);
-        }
+        bullet1.SetActive(currentBullet >= 1);
+        bullet2.SetActive(currentBullet >= 2);
+        bullet3.SetActive(currentBullet >= 3);
     }
 
     private IEnumerator ReloadOnTime(float duration)
     {
+        if (isReloading) yield break;
+
+        isReloading = true;
+        Debug.Log("[PlayerManager] : Reloading...");
+
         yield return new WaitForSeconds(duration);
 
         currentBullet = maxAmmo;
-        Debug.Log("[PlayerManager] : Stun wore off.");
+
+        isReloading = false;
+        Debug.Log("[PlayerManager] : Reload Complete.");
     }
 
     void SetKnockBackForce()

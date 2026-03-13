@@ -22,11 +22,14 @@ public class Bullet : MonoBehaviour
         if (collision.gameObject ==playerManager.player)
         {
             playerManager.GiveStun();
+            Destroy(gameObject);
+            return;
         }
 
         if (collision.gameObject.tag != "Passable")
         {
             Destroy(gameObject);
+            return;
         }
         
     }

@@ -76,9 +76,8 @@ public class PlayerController : MonoBehaviour
     #endregion
 
 
-    #region 
-
-void ApplyFinalMovement()
+    #region Physics
+    void ApplyFinalMovement()
     {
         Vector2 targetVelocity = new Vector2(xAxis * moveSpeed, rb.linearVelocityY);
 
