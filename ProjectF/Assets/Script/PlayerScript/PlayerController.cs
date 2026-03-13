@@ -75,7 +75,6 @@ public class PlayerController : MonoBehaviour
 
 void ApplyFinalMovement()
     {
-        // Start with basic movement + current gravity
         Vector2 targetVelocity = new Vector2(xAxis * moveSpeed, rb.linearVelocityY);
 
         if (jumpRequested)
@@ -84,26 +83,19 @@ void ApplyFinalMovement()
             jumpRequested = false;
         }
 
-        // Apply the Shotgun logic
         targetVelocity = AddKnockBackEffect(targetVelocity);
         
-        // Limit and apply
         targetVelocity = LimitXYSpeed(targetVelocity);
         rb.linearVelocity = targetVelocity;
 
-        // CRITICAL: Decay the horizontal influence so it doesn't last forever
         float decay = isGrounded ? 50f : 20f;
         activeKnockBack.x = Vector2.MoveTowards(activeKnockBack, Vector2.zero, decay * Time.fixedDeltaTime).x;
-        // We don't decay Y here because gravity handles it once it's applied to the Rigidbody
         activeKnockBack.y = 0; 
     }
 
     Vector2 AddKnockBackEffect(Vector2 targetVelocity)
     {
-        // 1. Process the "Instant" Shotgun Blast
         targetVelocity = ShotGunKnockBack(targetVelocity);
-        
-        // 2. Add the "Persistent" Horizontal Slide
         targetVelocity.x += activeKnockBack.x;
         
         return targetVelocity;
@@ -113,26 +105,28 @@ void ApplyFinalMovement()
     {
         if (shotgun.isPressed)
         {
-            // Set the force for this specific shot
+            // Set shotgun knowckback
             Vector2 shotForce = shotgun.KnockBackForce;
 
-            // RECOVERY: If falling and shooting down (shotForce.y is positive)
+            // 
             if (rb.linearVelocityY < -0.1f && shotForce.y > 0)
             {
 
                 float recoilBonus = Mathf.Abs(rb.linearVelocityY);
                 recoilBonus *= 0.8f; 
                 shotForce.y += recoilBonus;
+                Debug.Log($"Shotgun Knockback Force: {targetVelocity}");
             }
-
-            // Apply Vertical immediately (One-time pop)
+            
+            // Set Y knowckback force
             targetVelocity.y += shotForce.y;
 
-            // Store Horizontal to activeKnockBack (to be decayed in ApplyFinalMovement)
+            // Apply x Force to active Knockback
             activeKnockBack.x += shotForce.x;
 
             shotgun.isPressed = false;
         }
+
         return targetVelocity;
     }
 

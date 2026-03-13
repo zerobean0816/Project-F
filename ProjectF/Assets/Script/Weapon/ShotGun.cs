@@ -62,7 +62,7 @@ public class ShotGun : MonoBehaviour
 
     void Shoot()
     {
-        Debug.Log("Shoot!");
+        Debug.Log("Shotgun Shotted!");
         if (isPressed)
         {
             SetKnockBackForce();
@@ -82,6 +82,6 @@ public class ShotGun : MonoBehaviour
 
         KnockBackForce = oppositeDirection * shootStrength;
 
-         Debug.Log($"Opposite Direction {oppositeDirection} | KnockBackFroce: {KnockBackForce}");
+        //Debug.Log($"Opposite Direction {oppositeDirection} | KnockBackFroce: {KnockBackForce}");
     }
 }
