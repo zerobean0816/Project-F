@@ -42,14 +42,26 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Barrel
-    uniqueID: 1452155173
+  - name: New Layer 4
+    uniqueID: 2423019801
+    locked: 0
+  - name: New Layer 6
+    uniqueID: 2791489263
+    locked: 0
+  - name: Player
+    uniqueID: 3781448703
+    locked: 0
+  - name: Face
+    uniqueID: 4093755549
     locked: 0
   - name: Wood
     uniqueID: 2840277313
     locked: 0
-  - name: Face
-    uniqueID: 4093755549
+  - name: Barrel
+    uniqueID: 1452155173
+    locked: 0
+  - name: Platform
+    uniqueID: 691242527
     locked: 0
   m_RenderingLayers:
   - Default
