@@ -60,11 +60,14 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        float currentResistance= isGrounded ? groundResistnace : airResistance;
-        
-        activeKnockBack = Vector2.MoveTowards(activeKnockBack, Vector2.zero,currentResistance);
+        if (GameManager.Instance.playerManager.isStuned)
+        {
+            float currentResistance= isGrounded ? groundResistnace : airResistance;
+            
+            activeKnockBack = Vector2.MoveTowards(activeKnockBack, Vector2.zero,currentResistance);
 
-        ApplyFinalMovement();
+            ApplyFinalMovement();
+        }
     }
     #endregion
 

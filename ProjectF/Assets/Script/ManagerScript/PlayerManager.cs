@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
@@ -6,6 +7,8 @@ public class PlayerManager : MonoBehaviour
 
     public GameObject player {get; private set;}
     public Vector2 playerPos;
+
+    public float stunTime = 2f;
 
     // Player State
     public bool _isAlive;
@@ -74,6 +77,16 @@ public class PlayerManager : MonoBehaviour
     {
         Debug.Log("[PlayerManager] : Player get stunned!");
         isStuned = true;
+        
+        StartCoroutine(StunTimeRoutime(stunTime));
+    }
+
+    private IEnumerator StunTimeRoutime(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        isStuned = false;
+        Debug.Log("[PlayerManager] : Stun wore off.");
     }
 
     void OnDestroy()
