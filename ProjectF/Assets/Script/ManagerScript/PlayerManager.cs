@@ -5,6 +5,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject playerPrefab;
 
     public GameObject player {get; private set;}
+    public Vector2 playerPos;
 
     // Player State
     public bool _isAlive;
@@ -20,16 +21,34 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
+    public bool isStuned {get; private set;}
+    
+    // HP contorl
+    private float _hp;
+    public float HP
+    {
+        get{return _hp; }
+        set
+        {
+            _hp = value;
+            if (_hp <= 0)
+            {
+                is_Alive = false;
+            }
+        }
+    }
 
     public void ManagerAwake()
     {
         Debug.Log("[PlayerManager] : Awake is Called");
         InitalizePlayer();
+
+        isStuned = false;
     }
 
     public void ManagerUpdate()
     {
-        
+        playerPos = player.transform.position;
     }
 
 
@@ -49,6 +68,12 @@ public class PlayerManager : MonoBehaviour
     public void KillPlayer()
     {
         is_Alive = false;
+    }
+
+    public void GiveStun()
+    {
+        Debug.Log("[PlayerManager] : Player get stunned!");
+        isStuned = true;
     }
 
     void OnDestroy()

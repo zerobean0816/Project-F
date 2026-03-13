@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         SetMousePosForCamera();
+        CallSubManager_Update();
     }
 
 
@@ -73,16 +74,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void CallSubManagerAwake()
+    void CallSubManager_Awake()
     {
         playerManager.ManagerAwake();
+    }
+
+    void CallSubManager_Update()
+    {
+        playerManager.ManagerUpdate();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == "ManuMenu") return;
-        
-        CallSubManagerAwake();
+
+        CallSubManager_Awake();
 
         SetupCamera(scene);
     }

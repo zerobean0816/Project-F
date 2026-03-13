@@ -410,6 +410,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShotGun
       objectReference: {fileID: 0}
+    - target: {fileID: 6734385996421745222, guid: e8a3d85433fd324439b93c539ce74e56, type: 3}
+      propertyPath: shootStrength
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 7827240299432624564, guid: e8a3d85433fd324439b93c539ce74e56, type: 3}
       propertyPath: m_SortingLayer
       value: 5

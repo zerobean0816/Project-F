@@ -62,7 +62,7 @@ public class ShotGun : MonoBehaviour
 
     void Shoot()
     {
-        Debug.Log("Shotgun Shotted!");
+        //Debug.Log("Shotgun Shotted!");
         if (isPressed)
         {
             SetKnockBackForce();

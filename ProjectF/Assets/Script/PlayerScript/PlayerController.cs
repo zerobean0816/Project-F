@@ -1,5 +1,3 @@
-using Unity.VisualScripting;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 [RequireComponent(typeof (Rigidbody2D))]
@@ -24,12 +22,12 @@ public class PlayerController : MonoBehaviour
 
     // Physics Variables
     private float xAxis;
-    private float yAxis;
     private bool jumpRequested;
-    public bool isGrounded {get; private set;}
     private Vector2 activeKnockBack;   
-    private float xSpeedLimit = 50f;
-    private float ySpeedLimit = 40f;
+    private float xSpeedLimit = 60f;
+    private float ySpeedLimit = 45f;
+
+    public bool isGrounded {get; private set;}
 
 
     #region Basic Process
@@ -115,7 +113,7 @@ void ApplyFinalMovement()
                 float recoilBonus = Mathf.Abs(rb.linearVelocityY);
                 recoilBonus *= 0.8f; 
                 shotForce.y += recoilBonus;
-                Debug.Log($"Shotgun Knockback Force: {targetVelocity}");
+                //Debug.Log($"Shotgun Knockback Force: {targetVelocity}");
             }
             
             // Set Y knowckback force
