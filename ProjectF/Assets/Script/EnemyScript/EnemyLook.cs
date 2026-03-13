@@ -49,7 +49,6 @@ public class EnemyLook : MonoBehaviour
         RotateGun();
     }
 
-
     void TrackPlayer()
     {
         if (player == null)

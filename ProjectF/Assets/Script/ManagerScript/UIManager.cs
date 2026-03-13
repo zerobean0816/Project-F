@@ -1,16 +1,21 @@
-using UnityEngine;
 
+using TMPro;
+using UnityEngine;
 public class UIManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public TextMeshPro bulletText;
+
     void Start()
     {
-        
+        if (bulletText == null)
+        {
+            Debug.LogError("[UIManager] : bulletTextBox is missing!");
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void SetBulletCount(float count)
     {
-        
+        bulletText.text = "Bullet: " + count.ToString();
     }
 }

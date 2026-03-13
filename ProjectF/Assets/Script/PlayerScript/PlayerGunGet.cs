@@ -10,10 +10,13 @@ public class PlayerGunGet : MonoBehaviour
     {
     }
 
-    void Update()
+    public void GunUpdate()
     {
-        GetLookDirection();
-        RotateGun();
+        if (!GameManager.Instance.playerManager.isStuned)
+        {
+            GetLookDirection();
+            RotateGun();
+        }
     }
 
     void GetLookDirection()

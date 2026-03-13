@@ -29,6 +29,11 @@ public class EnemyMain : MonoBehaviour
         enemyLook.LookUpdate();
 
         enemyGun.GunUpdate();
+
+        if (HP <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -37,5 +42,10 @@ public class EnemyMain : MonoBehaviour
         {
             GameManager.Instance.playerManager.GiveStun();
         }
+    }
+
+    public void GiveDamage(int damage)
+    {
+        HP -= damage;
     }
 }

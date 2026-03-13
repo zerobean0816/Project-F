@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
 
     // Reference Variables
     private ShotGun shotgun;
+    private PlayerGunGet playerGunGet;
     private Rigidbody2D rb;
 
     // Physics Variables
@@ -35,6 +36,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         shotgun = GetComponentInChildren<ShotGun>();
+        playerGunGet = GetComponent<PlayerGunGet>();
 
         if (shotgun == null)
         {
@@ -52,6 +54,8 @@ public class PlayerController : MonoBehaviour
         isGrounded = CheckGroundCollide();
         xAxis = Input.GetAxis("Horizontal");
 
+        playerGunGet.GunUpdate();
+
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             jumpRequested= true;
@@ -60,7 +64,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (GameManager.Instance.playerManager.isStuned)
+        if (!GameManager.Instance.playerManager.isStuned)
         {
             float currentResistance= isGrounded ? groundResistnace : airResistance;
             

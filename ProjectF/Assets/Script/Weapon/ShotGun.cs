@@ -1,10 +1,16 @@
+using System.Collections;
+using Unity.VectorGraphics;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class ShotGun : MonoBehaviour
 {   
     [SerializeField] float shootStrength = 30;
     [SerializeField] int maxAmmo = 4;
 
+    [SerializeField] GameObject bullet1;
+    [SerializeField] GameObject bullet2;
+    [SerializeField] GameObject bullet3;
 
     public bool isPressed;
     public Vector2 KnockBackForce {get; private set;}
@@ -51,27 +57,65 @@ public class ShotGun : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && isShootable)
         {
             isPressed = true;
-            Shoot();
             currentBullet --;
+            Shoot();
+            GameManager.Instance.uIManager.SetBulletCount(currentBullet);
         }
         else if (!isShootable)
         {
-            ReloadGun();
+            ReloadOnTime(.5f);
         }
+
+        ShowBulletByCount();
     }
 
     void Shoot()
     {
         //Debug.Log("Shotgun Shotted!");
-        if (isPressed)
+        if (isPressed && isShootable)
         {
+            Debug.Log($"[ShootGun] : BulletCount = {currentBullet}");
             SetKnockBackForce();
         }
     }
     
-    void ReloadGun()
+    void ShowBulletByCount()
     {
+        if (currentBullet == 1)
+        {
+            bullet1.SetActive(true);
+
+            bullet2.SetActive(false);
+            bullet3.SetActive(false);
+        }
+        else if (currentBullet == 2)
+        {
+            bullet1.SetActive(true);
+            bullet2.SetActive(true);
+
+            bullet3.SetActive(false);
+        }
+        else if (currentBullet == 3)
+        {
+            bullet1.SetActive(true);
+            bullet2.SetActive(true);
+            bullet3.SetActive(true);
+        }
+
+        else
+        {
+            bullet1.SetActive(false);
+            bullet2.SetActive(false);
+            bullet3.SetActive(false);
+        }
+    }
+
+    private IEnumerator ReloadOnTime(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
         currentBullet = maxAmmo;
+        Debug.Log("[PlayerManager] : Stun wore off.");
     }
 
     void SetKnockBackForce()
