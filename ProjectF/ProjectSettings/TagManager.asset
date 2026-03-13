@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Boss
   layers:
   - Default
   - TransparentFX
@@ -40,6 +41,15 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Barrel
+    uniqueID: 1452155173
+    locked: 0
+  - name: Wood
+    uniqueID: 2840277313
+    locked: 0
+  - name: Face
+    uniqueID: 4093755549
     locked: 0
   m_RenderingLayers:
   - Default

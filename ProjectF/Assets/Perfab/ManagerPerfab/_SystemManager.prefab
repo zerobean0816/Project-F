@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3685031818501225629}
   - component: {fileID: 1386038149795756408}
-  - component: {fileID: 2800782019119043130}
   - component: {fileID: 5528196438392472904}
   - component: {fileID: 3170085391828489497}
   - component: {fileID: 4316990910945498796}
@@ -48,18 +47,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e93bb34d25e08004c97876794c7e96dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
---- !u!114 &2800782019119043130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4625088182940197471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12bae9dfc0610c440a997594db017fc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneManager
+  playerManager: {fileID: 3170085391828489497}
+  uIManager: {fileID: 5528196438392472904}
+  enemyManager: {fileID: 4316990910945498796}
 --- !u!114 &5528196438392472904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,6 +74,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0442fc41f34c374b9eca5902a41e998, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
+  playerPrefab: {fileID: 5056669485122258049, guid: fe70e19386c005b44a6d04cbdb755569, type: 3}
 --- !u!114 &4316990910945498796
 MonoBehaviour:
   m_ObjectHideFlags: 0

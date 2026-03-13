@@ -8,9 +8,6 @@ public class PlayerController : MonoBehaviour
     float moveSpeed = 20f;
     float jumpForce = 25f;
 
-    [Header("Mario Jump Setting")]
-    float FallMultiplier = 4f;
-    float LowJumpMultiplier = 15f;
 
     [Header("Layer that is Jumpable")]
     public LayerMask groundLayer;
@@ -19,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform groundChecker;
 
     // 
+    private ShotGun shotgun;
     private Rigidbody2D rb;
     private float xAxis;
 
@@ -36,6 +34,7 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
+        shotgun = GetComponentInChildren<ShotGun>();
     }
 
     void Start()
@@ -80,41 +79,42 @@ public class PlayerController : MonoBehaviour
         return Physics2D.OverlapCircle(groundChecker.position, checkerRadius, groundLayer);
     }
 
-
     void ApplyPhysics()
     {
-        Vector2 currentVel = rb.linearVelocity;
+        ApplyMovPhysics(out Vector2 currentVel);
 
-        // 1. Snappy Horizontal Movement
-        // Use GetAxisRaw in Update for instant start/stop (no sliding)
+        ApplyKnockBack(currentVel);
+
+        rb.linearVelocity = currentVel;
+    }
+
+    void ApplyMovPhysics(out Vector2 currentVel)
+    {
         currentVel.x = xAxis * moveSpeed;
 
         // 2. The Jump "Pop"
         if (jumpRequested)
         {
-            // Use = instead of += to ensure the jump strength is consistent 
-            // regardless of current falling speed
             currentVel.y = jumpForce; 
             jumpRequested = false;
         }
-
-        // 3. HOLLOW KNIGHT JUMP PHYSICS
-        if (currentVel.y > 0) // Rising
-        {
-            if (!isHoldingJump)
-            {
-                // The "Cut-off": Apply MASSIVE gravity when button is released
-                // Hollow Knight feels like you hit a ceiling
-                currentVel.y += Physics2D.gravity.y * (LowJumpMultiplier - 1) * Time.fixedDeltaTime;
-            }
-        }
-        else if (currentVel.y < 0) // Falling
-        {
-            // Faster falling for a "heavy" feel
-            currentVel.y += Physics2D.gravity.y * (FallMultiplier - 1) * Time.fixedDeltaTime;
-        }
-
-        rb.linearVelocity = currentVel;
+        currentVel.y = rb.linearVelocityY;
     }
+
+    void ApplyKnockBack(Vector2 currentVel)
+    {
+        // shotgun KnockBack
+        if (shotgun.isPressed)
+        {
+            currentVel += shotgun.KnockBack();
+        }
+
+        // Enemy KnockBack
+        if (true)
+        {
+            
+        }
+    }
+
     #endregion
 }
