@@ -7,7 +7,19 @@ public class PlayerManager : MonoBehaviour
     public GameObject player {get; private set;}
 
     // Player State
-    public bool is_Alive {get; private set; }
+    public bool _isAlive;
+    public bool is_Alive {
+        get{ return _isAlive;}
+
+        private set
+        {
+            _isAlive = value;
+            if (_isAlive)
+            {
+                Debug.Log("[PlayerManager] : Player is Dead!");
+            }
+        }
+    }
 
     public void ManagerAwake()
     {

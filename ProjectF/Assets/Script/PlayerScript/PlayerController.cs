@@ -1,12 +1,15 @@
 
+
 using UnityEngine;
 
 [RequireComponent(typeof (Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
     [Header("Basic Player Setting")]
-    float moveSpeed = 20f;
-    float jumpForce = 25f;
+    [SerializeField] float moveSpeed = 20f;
+    [SerializeField] float jumpForce = 25f;
+    [SerializeField] float groundResistnace = 50f;
+    [SerializeField] float airResistance = 20f;
 
 
     [Header("Layer that is Jumpable")]
@@ -15,19 +18,18 @@ public class PlayerController : MonoBehaviour
     [Header("Get Checkers")]
     [SerializeField] Transform groundChecker;
 
-    // 
+    // Reference Variables
     private ShotGun shotgun;
     private Rigidbody2D rb;
+
+    // Physics Variables
     private float xAxis;
-
-    // Jump Request values
+    private float yAxis;
     private bool jumpRequested;
-    private bool isHoldingJump;
     public bool isGrounded {get; private set;}
-
-    // Varaible for more flexible Jump
-    private float jumpBufferTime = 0.1f;
-    private float jumpBufrferCounter;
+    private Vector2 activeKnockBack;   
+    private float xSpeedLimit = 90f;
+    private float ySpeedLimit = 90f;
 
 
     #region Basic Process
@@ -35,11 +37,16 @@ public class PlayerController : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         shotgun = GetComponentInChildren<ShotGun>();
+
+        if (shotgun == null)
+        {
+            Debug.LogError("[PlayerController] : Shotgun is not found in child of Player");
+        }
     }
 
     void Start()
     {
-        
+        activeKnockBack = Vector2.zero;
     }
 
     void Update()
@@ -47,73 +54,59 @@ public class PlayerController : MonoBehaviour
         isGrounded = CheckGroundCollide();
         xAxis = Input.GetAxis("Horizontal");
 
-        if (Input.GetKey(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            jumpBufrferCounter = jumpBufferTime;
+            jumpRequested= true;
         }
-        else
-        {
-            jumpBufrferCounter -= Time.deltaTime;
-        }
-
-        if (jumpBufrferCounter > 0 && isGrounded)
-        {
-            jumpRequested = true;
-            jumpBufrferCounter = 0;
-        }
-
-        isHoldingJump = Input.GetKey(KeyCode.Space);
-
     }
 
     void FixedUpdate()
     {
-        ApplyPhysics();
+        float currentResistance= isGrounded ? groundResistnace : airResistance;
+        activeKnockBack = Vector2.MoveTowards(activeKnockBack, Vector2.zero,currentResistance);
+
+        ApplyFinalMovement();
     }
     #endregion
+
+
+    #region 
+
+    void ApplyFinalMovement()
+    {
+        float targetX = xAxis * moveSpeed; ;
+        float targetY = rb.linearVelocityY;
+
+        // Handle Jump
+        if (jumpRequested)
+        {
+            Debug.Log("Applying JumpForce");
+            targetY = jumpForce; // Replace Y entirely for a consistent jump height
+            jumpRequested = false;
+        }
+
+        if (shotgun.isPressed)
+        {
+            activeKnockBack += shotgun.KnockBackForce;
+            targetY = targetY + activeKnockBack.y;
+            shotgun.isPressed = false;
+        }
+        
+        targetX += activeKnockBack.x;
+
+        targetX = Mathf.Clamp( targetX, -xSpeedLimit, xSpeedLimit);    
+        targetY = Mathf.Clamp( targetY, -ySpeedLimit, ySpeedLimit);
+
+        rb.linearVelocity = new Vector2 ( targetX, targetY);
+    }
+    #endregion
+
 
     #region GoundState
     bool CheckGroundCollide()
     {
         float checkerRadius = 0.2f;
         return Physics2D.OverlapCircle(groundChecker.position, checkerRadius, groundLayer);
-    }
-
-    void ApplyPhysics()
-    {
-        ApplyMovPhysics(out Vector2 currentVel);
-
-        ApplyKnockBack(currentVel);
-
-        rb.linearVelocity = currentVel;
-    }
-
-    void ApplyMovPhysics(out Vector2 currentVel)
-    {
-        currentVel.x = xAxis * moveSpeed;
-
-        // 2. The Jump "Pop"
-        if (jumpRequested)
-        {
-            currentVel.y = jumpForce; 
-            jumpRequested = false;
-        }
-        currentVel.y = rb.linearVelocityY;
-    }
-
-    void ApplyKnockBack(Vector2 currentVel)
-    {
-        // shotgun KnockBack
-        if (shotgun.isPressed)
-        {
-            currentVel += shotgun.KnockBack();
-        }
-
-        // Enemy KnockBack
-        if (true)
-        {
-            
-        }
     }
 
     #endregion
