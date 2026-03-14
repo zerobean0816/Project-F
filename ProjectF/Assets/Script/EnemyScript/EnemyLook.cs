@@ -56,6 +56,10 @@ public class EnemyLook : MonoBehaviour
             Debug.LogError("Player is missing in GameManger");
             return;
         }
+        if (enemyGun == null)
+        {
+            return;
+        }
 
         Vector2 offset = (Vector2)player.transform.position - (Vector2)enemyGun.gun.transform.position ;
         sqrDiatanceBWplayer = offset.SqrMagnitude();

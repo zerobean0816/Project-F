@@ -22,7 +22,10 @@ public class ShotgunBullet : MonoBehaviour
     {
         //Debug.Log($"[ShotgunBullet] : Hitted Something {collision.gameObject.name}");
 
-        
+        if (collision.CompareTag("pBullet"))
+        {
+            return;
+        }
 
         if (collision.gameObject != shotgun && collision.gameObject != playerManager.player)
         {

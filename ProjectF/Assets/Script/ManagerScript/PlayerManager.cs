@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
@@ -7,6 +8,8 @@ public class PlayerManager : MonoBehaviour
 
     public GameObject player {get; private set;}
     public Vector2 playerPos;
+    public Rigidbody2D playerRb;
+
     public float stunTime = 2f;
     public ShotGun shotGun {get; private set; }
 
@@ -43,11 +46,21 @@ public class PlayerManager : MonoBehaviour
         playerPos = player.transform.position;
     }
 
+    // Give Player Knockback with stun, made for enemy bullet, or enemy it self
+    public void GivePlayerKnockBack(Transform otherPos, float stunForce)
+    {
+        Vector2 direction = ( player.transform.position - otherPos.position ).normalized;
+
+        playerRb.linearVelocity = Vector2.zero;
+
+        playerRb.AddForce(direction * stunForce);
+        GameManager.Instance.playerManager.GiveStun();
+    }
 
     private void InitalizePlayer()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-
+        playerRb = player.GetComponent<Rigidbody2D>();
         if (player == null)
         {
             Debug.Log("[PlayerManager] : Player is Not in Scene, Loading new Player...");

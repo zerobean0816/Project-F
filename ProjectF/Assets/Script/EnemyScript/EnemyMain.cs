@@ -1,13 +1,16 @@
 
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyLook))]
+
 public class EnemyMain : MonoBehaviour
 {
+    [SerializeField] float stunForce = 20f;
+    [SerializeField] int HP = 3;
+
     private EnemyLook enemyLook;
     private EnemyGun enemyGun;
-
-    private int HP;
+    
+    private bool isType2;
 
     void Start()
     {
@@ -20,15 +23,18 @@ public class EnemyMain : MonoBehaviour
             enemyLook = GetComponentInChildren<EnemyLook>();
         }
 
+        isType2 = (enemyGun == null && enemyLook == null);
         HP = 5;
     }
 
     // Update is called once per frame
     void Update()
     {
-        enemyLook.LookUpdate();
-
-        enemyGun.GunUpdate();
+        if (!isType2)
+        {
+            enemyLook.LookUpdate();
+            enemyGun.GunUpdate();
+        }
 
         if (HP <= 0)
         {
@@ -41,7 +47,7 @@ public class EnemyMain : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            GameManager.Instance.playerManager.GiveStun();
+            GameManager.Instance.playerManager.GivePlayerKnockBack(transform , stunForce);
         }
     }
 

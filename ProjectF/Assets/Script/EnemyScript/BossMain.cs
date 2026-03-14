@@ -11,6 +11,8 @@ public class BossMain : MonoBehaviour
     [SerializeField] float slowDistance = 20f;
     [SerializeField] float catchUpDistance = 60f;
 
+    [SerializeField] float knowckbackForce = 2000f;
+
     public LayerMask unbreakableLayer;
 
 
@@ -79,7 +81,8 @@ public class BossMain : MonoBehaviour
 
         if (other.gameObject == player)
         {
-            GameManager.Instance.playerManager.GiveStun();
+            //GameManager.Instance.playerManager.GivePlayerKnockBack(transform , knowckbackForce);
+            GameManager.Instance.playerManager.KillPlayer();
             return;
         }
 

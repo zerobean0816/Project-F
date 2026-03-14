@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Passable
   - Bullet
+  - pBullet
   layers:
   - Default
   - TransparentFX

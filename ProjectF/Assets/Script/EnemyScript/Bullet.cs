@@ -3,6 +3,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] float bulletSpeed = 15f;
+    [SerializeField] float stunForce = 600f;
     private PlayerManager playerManager;
     private Rigidbody2D rb;
     public GameObject owner {get; private set;}
@@ -20,8 +21,7 @@ public class Bullet : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            Debug.Log("[Bullet] : Hitted Player! Destorying myself");
-            playerManager.GiveStun();
+            GameManager.Instance.playerManager.GivePlayerKnockBack(transform , stunForce);
             Destroy(gameObject);
             return;
         }

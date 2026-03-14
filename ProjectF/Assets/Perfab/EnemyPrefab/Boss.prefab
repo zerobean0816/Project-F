@@ -152,18 +152,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3d649685cad76c4e9f1714ba90bf4d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossMain
-  slowSpeed: 6
-  normalSpeed: 10
+  slowSpeed: 5
+  normalSpeed: 9
   fastSpeed: 13
   acceleration: 10
   slowDistance: 20
   catchUpDistance: 50
+  knowckbackForce: 2000
   unbreakableLayer:
     serializedVersion: 2
     m_Bits: 1024
-  UnbreakabewallLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!50 &7677835739721275847
 Rigidbody2D:
   serializedVersion: 5

@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
                 playerSkill.CallSkill();
             }
 
-            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W) ) && isGrounded)
+            if ((Input.GetKeyDown(KeyCode.Space) ) && isGrounded)
             {
                 jumpRequested= true;
             }
@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
     {
         // Only decrease X force
         Vector2 stunMove;
-        stunMove.x = rb.linearVelocityX * -4f;
+        stunMove.x = rb.linearVelocityX * -2f;
         stunMove.y = rb.linearVelocityY;
 
         rb.AddForce(stunMove);

@@ -1,15 +1,15 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Windows.WebCam;
-
 
 public class ShotGun : MonoBehaviour,IKnockbackSource
 {   
     [Header("Bullet Stats")]
-    [SerializeField] float shootStrength = 30;
+    [SerializeField] float shootStrength = 30f;
     [SerializeField] int maxAmmo = 3;
     [SerializeField] float reloadTime = 1f;
     [SerializeField] int bulletDamage = 1;
+    [SerializeField] float fireDegree = 30f;
+    [SerializeField] int bulletsPerShoot = 5;
 
     [Header("Bullet State UI")]
     [SerializeField] GameObject bullet1UI;
@@ -20,11 +20,13 @@ public class ShotGun : MonoBehaviour,IKnockbackSource
     [SerializeField] GameObject bulletPerFab;
     [SerializeField] public Transform firePoint;
 
+    // Player Info
     GameObject player;
     Rigidbody2D playerRb;
+
+
     public Vector2 knockBackForce {get; private set;}
     public bool isPressed {get; private set;}
-    private int _currentBullet;
     public int currentBullet
     {
         get
@@ -38,13 +40,15 @@ public class ShotGun : MonoBehaviour,IKnockbackSource
         }
     }
     public bool isReloading {get; private set;}
-
     public float reloadTimer {get; private set;}
 
+    // Connect IknockbackSource;
     public bool IsRequesting => isPressed;
     public Vector2 GetForce() => SetKnockBackForce();
     public void Consume() => FinishePress();
 
+    private int _currentBullet;
+    private float halfAngle;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -58,8 +62,10 @@ public class ShotGun : MonoBehaviour,IKnockbackSource
         }
         isReloading = false;
         currentBullet = maxAmmo;
+        halfAngle = fireDegree / 2;
     }
 
+    #region  Gun Control
     // Update is called once per frame
     public void ReloadWhenEmpty()
     {
@@ -68,13 +74,30 @@ public class ShotGun : MonoBehaviour,IKnockbackSource
             StartCoroutine(ReloadOnTime(reloadTime));
         }
     }
-
+    
     public void FireGun()
     {
         isPressed = true;
         currentBullet --;
 
-        SpawnBulletOnRotation();
+        BrustBulletWithinAngle();
+    }
+
+    void BrustBulletWithinAngle()
+    {
+        for (int i = 0 ; i < bulletsPerShoot; i++)
+        {
+            float randomValue = Random.Range(-halfAngle, halfAngle);
+            SpawnBulletOnRotation(randomValue);
+        }
+    }
+
+    void SpawnBulletOnRotation(float randomAngle)
+    {
+        Quaternion spwnRotate =  Quaternion.Euler(0,0, (randomAngle + transform.eulerAngles.z ));
+
+        GameObject bullet = Instantiate(bulletPerFab, firePoint.position, spwnRotate);
+        bullet.GetComponent<ShotgunBullet>().SetDamageValue(bulletDamage);
     }
     
     public void ShowBulletByCount()
@@ -106,6 +129,9 @@ public class ShotGun : MonoBehaviour,IKnockbackSource
         isReloading = false;
     }
 
+    #endregion
+
+    #region Shotgun knockBack
     Vector2 SetKnockBackForce()
     {
         Vector2 playerPos = player.transform.position;
@@ -132,11 +158,6 @@ public class ShotGun : MonoBehaviour,IKnockbackSource
     {
         isPressed = false;
     }
+    #endregion
 
-    void SpawnBulletOnRotation()
-    {
-        //Debug.Log("[Shotgun] : Spawn Bullet!");
-        GameObject bullet = Instantiate(bulletPerFab, firePoint.position, transform.rotation);
-        bullet.GetComponent<ShotgunBullet>().SetDamageValue(bulletDamage);
-    }
 }
