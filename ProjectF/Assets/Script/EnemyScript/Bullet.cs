@@ -1,12 +1,11 @@
-
 using UnityEngine;
-
 
 public class Bullet : MonoBehaviour
 {
     [SerializeField] float bulletSpeed = 15f;
     private PlayerManager playerManager;
     private Rigidbody2D rb;
+    public GameObject owner {get; private set;}
 
     //[SerializeField] LayerMask passableLayer;
 
@@ -17,20 +16,31 @@ public class Bullet : MonoBehaviour
         rb.linearVelocity = transform.right * bulletSpeed;
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject ==playerManager.player)
+        if (collision.CompareTag("Player"))
         {
+            Debug.Log("[Bullet] : Hitted Player! Destorying myself");
             playerManager.GiveStun();
             Destroy(gameObject);
             return;
         }
 
-        if (collision.gameObject.tag != "Passable")
+        else if ( collision.CompareTag("Passable") || owner == collision.gameObject)
         {
-            Destroy(gameObject);
             return;
         }
+
+        else if (collision.CompareTag("Enemy"))
+        {
+            collision.gameObject.GetComponent<EnemyMain>().GiveDamage(1);
+        }
         
+        Destroy(gameObject);
+    }
+
+    public void SetSpowner(GameObject owner)
+    {
+        this.owner= owner;
     }
 }

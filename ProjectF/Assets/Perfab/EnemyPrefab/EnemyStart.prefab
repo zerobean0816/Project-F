@@ -482,7 +482,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyLook
   debugLineIsOn: 1
   lookRadius: 35
-  rotationSpeed: 30
+  rotationSpeed: 35
 --- !u!114 &530537115138721841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,7 +509,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyGun
   gun: {fileID: 6854481085731160356}
   firePivit: {fileID: 3738746464898434547}
-  fireRate: 0.2
+  fireRate: 3
   bullet: {fileID: 703501581334968416, guid: 4f15dc1f014253049b4829400823733f, type: 3}
 --- !u!61 &-1607971627996935382
 BoxCollider2D:

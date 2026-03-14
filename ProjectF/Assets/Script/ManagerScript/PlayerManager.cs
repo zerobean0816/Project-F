@@ -8,8 +8,7 @@ public class PlayerManager : MonoBehaviour
     public GameObject player {get; private set;}
     public Vector2 playerPos;
     public float stunTime = 2f;
-    public ShotGun shotGun;
-    private SpriteRenderer playerSpriteRenderer;
+    public ShotGun shotGun {get; private set; }
 
     // Player State
     public bool _isAlive;
@@ -47,11 +46,9 @@ public class PlayerManager : MonoBehaviour
         Debug.Log("[PlayerManager] : Awake is Called");
         InitalizePlayer();
 
-        shotGun = GetComponentInChildren();
+        shotGun = player.GetComponentInChildren<ShotGun>();
 
         isStuned = false;
-
-        playerSpriteRenderer = player.GetComponent<SpriteRenderer>();
     }
 
     public void ManagerUpdate()
@@ -83,7 +80,7 @@ public class PlayerManager : MonoBehaviour
         Debug.Log("[PlayerManager] : Player get stunned!");
         isStuned = true;
         
-        playerSpriteRenderer.color = Color.red;
+        player.GetComponent<PlayerState>().ChangePlayerRed();
 
         StartCoroutine(StunTimeRoutime(stunTime));
     }
@@ -91,9 +88,11 @@ public class PlayerManager : MonoBehaviour
     private IEnumerator StunTimeRoutime(float duration)
     {
         yield return new WaitForSeconds(duration);
-        playerSpriteRenderer.color = Color.gray;
+
         isStuned = false;
         Debug.Log("[PlayerManager] : Stun wore off.");
+
+        player.GetComponent<PlayerState>().ResetPlayerColor();
     }
 
     void OnDestroy()

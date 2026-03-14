@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyLook))]
@@ -32,6 +32,7 @@ public class EnemyMain : MonoBehaviour
 
         if (HP <= 0)
         {
+            Debug.Log("[EnemyMain] : Enemy has 0 HP, Destorying..");
             Destroy(gameObject);
         }
     }
@@ -47,5 +48,10 @@ public class EnemyMain : MonoBehaviour
     public void GiveDamage(int damage)
     {
         HP -= damage;
+    }
+
+    void OnDisable()
+    {
+        Debug.Log("[EnemyMain] : Destroying Conplete");
     }
 }

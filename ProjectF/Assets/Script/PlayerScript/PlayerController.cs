@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     // Reference Variables
     private ShotGun shotgun;
-    private PlayerGunGet playerGunGet;
+    private PlayerGunRotator playerGunRotator;
     private Rigidbody2D rb;
 
     // Physics Variables
@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         shotgun = GetComponentInChildren<ShotGun>();
-        playerGunGet = GetComponent<PlayerGunGet>();
+        playerGunRotator = GetComponent<PlayerGunRotator>();
 
         if (shotgun == null)
         {
@@ -54,11 +54,15 @@ public class PlayerController : MonoBehaviour
         isGrounded = CheckGroundCollide();
         xAxis = Input.GetAxis("Horizontal");
 
-        playerGunGet.GunUpdate();
-
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (!GameManager.Instance.playerManager.isStuned)
         {
-            jumpRequested= true;
+            playerGunRotator.GunUpdate();
+            shotgun.GunUpdate();
+
+            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            {
+                jumpRequested= true;
+            }
         }
     }
 
@@ -74,7 +78,6 @@ public class PlayerController : MonoBehaviour
         }
     }
     #endregion
-
 
     #region Physics
     void ApplyFinalMovement()
@@ -128,7 +131,8 @@ public class PlayerController : MonoBehaviour
             // Apply x Force to active Knockback
             activeKnockBack.x += shotForce.x;
 
-            shotgun.isPressed = false;
+            //  Finish Press mechanism
+            shotgun.FinishePress();
         }
 
         return targetVelocity;
@@ -143,7 +147,6 @@ public class PlayerController : MonoBehaviour
     }    
 
     #endregion
-
 
     #region GoundState
     bool CheckGroundCollide()

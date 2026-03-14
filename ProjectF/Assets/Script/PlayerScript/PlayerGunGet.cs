@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class PlayerGunGet : MonoBehaviour
+public class PlayerGunRotator : MonoBehaviour
 {
     [SerializeField] GameObject gun;
     Vector2 lookDirection;
