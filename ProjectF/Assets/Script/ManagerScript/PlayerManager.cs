@@ -18,7 +18,7 @@ public class PlayerManager : MonoBehaviour
         private set
         {
             _isAlive = value;
-            if (_isAlive)
+            if (!_isAlive)
             {
                 Debug.Log("[PlayerManager] : Player is Dead!");
             }
@@ -27,19 +27,6 @@ public class PlayerManager : MonoBehaviour
     public bool isStuned {get; private set;}
     
     // HP contorl
-    private float _hp;
-    public float HP
-    {
-        get{return _hp; }
-        set
-        {
-            _hp = value;
-            if (_hp <= 0)
-            {
-                is_Alive = false;
-            }
-        }
-    }
 
     public void ManagerAwake()
     {

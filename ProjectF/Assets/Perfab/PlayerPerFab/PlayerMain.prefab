@@ -437,6 +437,9 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  platformLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   groundChecker: {fileID: 671171792573925573}
 --- !u!114 &8241260304084087952
 MonoBehaviour:
@@ -476,7 +479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a843fe5b37fd17499f7b70f5ae707d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSkill
-  powerBullet: {fileID: 0}
+  powerBullet: {fileID: 6447894943511846450, guid: 1d651e19ba1027149a38f27187325d88, type: 3}
 --- !u!1 &5312979558045393585
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,19 +7,20 @@ TagManager:
   - Boss
   - Enemy
   - Passable
+  - Bullet
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Floor
+  - Platform
   - Water
   - UI
   - Wall
   - Breakable
   - Pasable
   - Glow
-  - 
-  - 
+  - Floor
+  - sideWall
   - 
   - 
   - 

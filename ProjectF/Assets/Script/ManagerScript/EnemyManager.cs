@@ -12,8 +12,8 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] GameObject bossDefault;
     [SerializeField] GameObject bossType1;
 
-    GameObject currentBoss;
-    Quaternion currentRotate;
+    public GameObject currentBoss {get; private set;}
+    public Quaternion currentRotate {get; private set;}
 
 
 

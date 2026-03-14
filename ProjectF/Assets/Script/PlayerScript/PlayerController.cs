@@ -12,11 +12,13 @@ public class PlayerController : MonoBehaviour
 
     [Header("Layer that is Jumpable")]
     public LayerMask groundLayer;
+    public LayerMask platformLayer;
     
     [Header("Get Checkers")]
     [SerializeField] Transform groundChecker;
 
     // Reference Variables
+    private PlayerSkill playerSkill;
     private ShotGun shotgun;
     private PlayerGunRotator playerGunRotator;
     private Rigidbody2D rb;
@@ -27,6 +29,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 activeKnockBack;   
     private float xSpeedLimit = 60f;
     private float ySpeedLimit = 45f;
+    private LayerMask jumpableLayer;
 
     public bool isGrounded {get; private set;}
 
@@ -37,6 +40,7 @@ public class PlayerController : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
         shotgun = GetComponentInChildren<ShotGun>();
         playerGunRotator = GetComponent<PlayerGunRotator>();
+        playerSkill = GetComponent<PlayerSkill>();
 
         if (shotgun == null)
         {
@@ -47,6 +51,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         activeKnockBack = Vector2.zero;
+
+        jumpableLayer = groundLayer | platformLayer;
     }
 
     void Update()
@@ -55,7 +61,13 @@ public class PlayerController : MonoBehaviour
         xAxis = Input.GetAxis("Horizontal");
 
         if (!GameManager.Instance.playerManager.isStuned)
-        {
+        {   
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                playerSkill.CallSkill();
+            }
+
+
             playerGunRotator.GunUpdate();
             shotgun.GunUpdate();
 
@@ -152,7 +164,7 @@ public class PlayerController : MonoBehaviour
     bool CheckGroundCollide()
     {
         float checkerRadius = 0.2f;
-        return Physics2D.OverlapCircle(groundChecker.position, checkerRadius, groundLayer);
+        return Physics2D.OverlapCircle(groundChecker.position, checkerRadius, jumpableLayer);
     }
 
     #endregion

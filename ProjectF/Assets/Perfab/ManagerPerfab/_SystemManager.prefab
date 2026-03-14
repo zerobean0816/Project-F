@@ -47,9 +47,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e93bb34d25e08004c97876794c7e96dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  playerManager: {fileID: 3170085391828489497}
-  uIManager: {fileID: 5528196438392472904}
-  enemyManager: {fileID: 4316990910945498796}
 --- !u!114 &5528196438392472904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,6 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67f568b573ffe7347b86590f33545563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiManager
+  bulletText: {fileID: 0}
 --- !u!114 &3170085391828489497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,6 +73,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
   playerPrefab: {fileID: 5056669485122258049, guid: fe70e19386c005b44a6d04cbdb755569, type: 3}
+  playerPos: {x: 0, y: 0}
+  stunTime: 0.7
+  _isAlive: 0
 --- !u!114 &4316990910945498796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,3 +88,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb2de158cb2afd845955080e83eb6c04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
+  bossDefault: {fileID: 7750980777081560156, guid: efdf284f954088f468fefb767632b669, type: 3}
+  bossType1: {fileID: 7470187089395700301, guid: eb9e68674bd0b054fbf1adc210062e00, type: 3}
