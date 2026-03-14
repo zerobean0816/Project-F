@@ -28,6 +28,16 @@ public class EnemyGun : MonoBehaviour
             Debug.LogError("[EenmyGun] : Bullet is not setted to EnemyGun");
         }
 
+        if (gun == null)
+        {
+            Debug.LogError("[EnemyGun] : gun is not missing in SerializeField");
+        }
+
+        if (firePivit == null)
+        {
+            Debug.LogError("[EnemyGun] : firePivit is not missing in SerializeField");
+        }
+
         isIdle = true;
         currentTime = 0f;
     }
@@ -55,5 +65,7 @@ public class EnemyGun : MonoBehaviour
     {
         //Debug.Log(gun.transform.rotation);
         spawnedBullet = Instantiate(bullet, firePivit.transform.position , gun.transform.rotation);
+        Bullet bulletScript = spawnedBullet.GetComponent<Bullet>();
+        bulletScript.SetSpowner(gameObject);
     }
 }
