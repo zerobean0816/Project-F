@@ -1,10 +1,9 @@
 using System.Collections;
-
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
+using UnityEngine.Windows.WebCam;
 
 
-public class ShotGun : MonoBehaviour
+public class ShotGun : MonoBehaviour,IKnockbackSource
 {   
     [Header("Bullet Stats")]
     [SerializeField] float shootStrength = 30;
@@ -19,10 +18,11 @@ public class ShotGun : MonoBehaviour
 
     [Header("Perfab")]
     [SerializeField] GameObject bulletPerFab;
-    [SerializeField] Transform firePoint;
+    [SerializeField] public Transform firePoint;
 
     GameObject player;
-    public Vector2 KnockBackForce {get; private set;}
+    Rigidbody2D playerRb;
+    public Vector2 knockBackForce {get; private set;}
     public bool isPressed {get; private set;}
     private int _currentBullet;
     public int currentBullet
@@ -37,12 +37,21 @@ public class ShotGun : MonoBehaviour
             _currentBullet = Mathf.Clamp(value, 0, maxAmmo);
         }
     }
-    private bool isReloading;
+    public bool isReloading {get; private set;}
+
+    public float reloadTimer {get; private set;}
+
+    public bool IsRequesting => isPressed;
+    public Vector2 GetForce() => SetKnockBackForce();
+    public void Consume() => FinishePress();
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = GameManager.Instance.playerManager.player;
+        playerRb = player.GetComponent<Rigidbody2D>();
+
         if (player == null)
         {
             Debug.Log("[ShotGun] : Player is NULL in GmaeManger.PlayerManager");
@@ -52,32 +61,23 @@ public class ShotGun : MonoBehaviour
     }
 
     // Update is called once per frame
-    public void GunUpdate()
+    public void ReloadWhenEmpty()
     {
-        FireGun();
-
-        if (currentBullet <= 0)
+        if (currentBullet < maxAmmo && player.GetComponent<PlayerController>().isGrounded)
         {
             StartCoroutine(ReloadOnTime(reloadTime));
         }
-
-        ShowBulletByCount();
     }
 
-    void FireGun()
+    public void FireGun()
     {
-        if (Input.GetMouseButtonDown(0) && !isReloading && currentBullet > 0)
-        {
-            SetKnockBackForce();
-            isPressed = true;
-            currentBullet --;
-            //GameManager.Instance.uIManager.SetBulletCount(currentBullet);
+        isPressed = true;
+        currentBullet --;
 
-            SpawnBulletOnRotation();
-        }
+        SpawnBulletOnRotation();
     }
     
-    void ShowBulletByCount()
+    public void ShowBulletByCount()
     {
         bullet1UI.SetActive(currentBullet >= 1);
         bullet2UI.SetActive(currentBullet >= 2);
@@ -87,27 +87,45 @@ public class ShotGun : MonoBehaviour
     private IEnumerator ReloadOnTime(float duration)
     {
         if (isReloading) yield break;
-
         isReloading = true;
-        Debug.Log("[PlayerManager] : Reloading...");
 
-        yield return new WaitForSeconds(duration);
+        reloadTimer = 0;
+        while (reloadTimer < duration)
+        {
+            if (!player.GetComponent<PlayerController>().isGrounded)
+            {
+                isReloading = false;
+                yield break;
+            }
 
-        currentBullet = maxAmmo;
+            reloadTimer += Time.deltaTime;
+            yield return null;
+        }
 
+        currentBullet ++;
         isReloading = false;
-        Debug.Log("[PlayerManager] : Reload Complete.");
     }
 
-    void SetKnockBackForce()
+    Vector2 SetKnockBackForce()
     {
         Vector2 playerPos = player.transform.position;
         Vector2 mousePOs = GameManager.Instance.mousePos;
         Vector2 oppositeDirection = (playerPos- mousePOs).normalized;
 
-        KnockBackForce = oppositeDirection * shootStrength;
+        SetRecoilOnYSpeed(oppositeDirection , out Vector2 finalVector);
+        //Debug.Log($"Opposite Direction {oppositeDirection} | KnockBackFroce: {oppositeDirection * shootStrength}");
 
-        //Debug.Log($"Opposite Direction {oppositeDirection} | KnockBackFroce: {KnockBackForce}");
+        return finalVector * shootStrength;
+    }
+
+    void SetRecoilOnYSpeed(Vector2 offset , out Vector2 finalVector)
+    {
+        finalVector = offset;
+        if ( playerRb.linearVelocityY < 0f && offset.y > .1f)
+        {
+            float bonus = Mathf.Abs(playerRb.linearVelocityY) * 0.07f;
+            finalVector.y += bonus;
+        }
     }
 
     public void FinishePress()

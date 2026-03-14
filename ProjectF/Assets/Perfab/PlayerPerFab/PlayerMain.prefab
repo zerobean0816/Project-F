@@ -430,17 +430,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d56ea514ccc1039438b9185343f36002, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  moveSpeed: 15
-  jumpForce: 25
-  groundResistnace: 9
-  airResistance: 1
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  platformLayer:
-    serializedVersion: 2
-    m_Bits: 1024
+  moveSpeed: 24
+  jumpForce: 32
+  groundResistnace: 15
+  airResistance: 20
   groundChecker: {fileID: 671171792573925573}
+  jumpableLayer:
+    serializedVersion: 2
+    m_Bits: 1160
 --- !u!114 &8241260304084087952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -480,6 +477,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSkill
   powerBullet: {fileID: 6447894943511846450, guid: 1d651e19ba1027149a38f27187325d88, type: 3}
+  shootStrength: 2300
 --- !u!1 &5312979558045393585
 GameObject:
   m_ObjectHideFlags: 0
@@ -810,9 +808,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8006418634894773412}
     - target: {fileID: 6734385996421745222, guid: e8a3d85433fd324439b93c539ce74e56, type: 3}
+      propertyPath: reloadTime
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6734385996421745222, guid: e8a3d85433fd324439b93c539ce74e56, type: 3}
       propertyPath: bulletPerFab
       value: 
       objectReference: {fileID: 8782077923879144244, guid: c7a5561b38d00f14c84a9a44e0251a78, type: 3}
+    - target: {fileID: 6734385996421745222, guid: e8a3d85433fd324439b93c539ce74e56, type: 3}
+      propertyPath: shootStrength
+      value: 1000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

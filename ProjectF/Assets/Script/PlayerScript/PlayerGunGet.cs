@@ -9,7 +9,7 @@ public class PlayerGunRotator : MonoBehaviour
     {
     }
 
-    public void GunUpdate()
+    public void rotatorUpdate()
     {
         if (!GameManager.Instance.playerManager.isStuned)
         {

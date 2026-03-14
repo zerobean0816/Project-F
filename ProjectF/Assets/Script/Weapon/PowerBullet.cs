@@ -26,12 +26,14 @@ public class PowerBullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        bool isProtected = ( ( ( 1<<collision.gameObject.layer) & dontDestoryLayer) == 0 );
+
         if (collision.gameObject == GameManager.Instance.playerManager.player)
         {
             return;
         }
 
-        if (( 1<<collision.gameObject.layer) == dontDestoryLayer)
+        if (!isProtected)
         {
             Destroy (gameObject);
             return;
@@ -39,8 +41,12 @@ public class PowerBullet : MonoBehaviour
 
         if (collision.gameObject.tag == "Boss")
         {
+            if (boss == null)
+            {
+                Debug.LogError("Boss is missing here");
+            }
             Debug.Log("[PowerBullet]: Boss Hitted, Pushing Back");
-            boss.GetComponent<BossMain>().PushBack(50f);
+            boss.GetComponent<BossMain>().PushBack(200f);
             return;
         }
 

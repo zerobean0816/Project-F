@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof (Rigidbody2D))]
@@ -11,11 +12,10 @@ public class PlayerController : MonoBehaviour
 
 
     [Header("Layer that is Jumpable")]
-    public LayerMask groundLayer;
-    public LayerMask platformLayer;
     
     [Header("Get Checkers")]
     [SerializeField] Transform groundChecker;
+    public LayerMask jumpableLayer;
 
     // Reference Variables
     private PlayerSkill playerSkill;
@@ -26,10 +26,8 @@ public class PlayerController : MonoBehaviour
     // Physics Variables
     private float xAxis;
     private bool jumpRequested;
-    private Vector2 activeKnockBack;   
     private float xSpeedLimit = 60f;
     private float ySpeedLimit = 45f;
-    private LayerMask jumpableLayer;
 
     public bool isGrounded {get; private set;}
 
@@ -48,12 +46,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        activeKnockBack = Vector2.zero;
-
-        jumpableLayer = groundLayer | platformLayer;
-    }
 
     void Update()
     {
@@ -67,96 +59,177 @@ public class PlayerController : MonoBehaviour
                 playerSkill.CallSkill();
             }
 
-
-            playerGunRotator.GunUpdate();
-            shotgun.GunUpdate();
-
-            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W) ) && isGrounded)
             {
                 jumpRequested= true;
             }
+
+            if (Input.GetMouseButtonDown(0) && shotgun.currentBullet > 0)
+            {
+                shotgun.FireGun();
+            }
+
+            playerGunRotator.rotatorUpdate();
+
+            shotgun.ReloadWhenEmpty();
+            shotgun.ShowBulletByCount();
         }
     }
 
     void FixedUpdate()
     {
-        if (!GameManager.Instance.playerManager.isStuned)
-        {
-            float currentResistance= isGrounded ? groundResistnace : airResistance;
-            
-            activeKnockBack = Vector2.MoveTowards(activeKnockBack, Vector2.zero,currentResistance);
-
-            ApplyFinalMovement();
+        // Check if Player is Stunned;
+        if (GameManager.Instance.playerManager.isStuned)  
+        { 
+            SetStunnedMovement();
+            return;
         }
+
+        // Handle XY Basic ForeAdd based on Player Input
+        HandleXMovementPhysics();
+        HandleYMovementPhysics();
+
+        AddKnockbackByType(shotgun);
+        AddKnockbackByType(playerSkill);
+
+        LimitVelocity();
     }
     #endregion
 
     #region Physics
-    void ApplyFinalMovement()
-    {
-        Vector2 targetVelocity = new Vector2(xAxis * moveSpeed, rb.linearVelocityY);
 
-        if (jumpRequested)
+    void SetStunnedMovement()
+    {
+        // Only decrease X force
+        Vector2 stunMove;
+        stunMove.x = rb.linearVelocityX * -4f;
+        stunMove.y = rb.linearVelocityY;
+
+        rb.AddForce(stunMove);
+    }
+
+    void HandleXMovementPhysics()
+    {
+        // Target speed from input
+        float targetX = xAxis * moveSpeed;
+        
+        // The "Difference" between where we are and where we want to be
+        float speedDif = targetX - rb.linearVelocityX;
+
+        // Acceleration value (Higher = Snappier, Lower = Weightier)
+        float accel = isGrounded ? groundResistnace : airResistance;
+
+        // If player is trying to move to other direction, give additional acceleration
+        bool isTurning = (targetX > 0 && rb.linearVelocityX < 0) || (targetX < 0 && rb.linearVelocityX > 0);
+        if (isTurning)
         {
-            targetVelocity.y = jumpForce;
+            accel *= 4f; // trun speed;
+        }
+        // Also apply extra friction if the player releases the keys (stopping)
+        else if (Mathf.Abs(xAxis) < 0.01f)
+        {
+            accel *= 1.5f;
+        }
+
+        // Apply X force to player;
+        rb.AddForce(Vector2.right * speedDif * accel);
+    }
+
+    void HandleYMovementPhysics()
+    {
+        if (jumpRequested && isGrounded)
+        {
+            // calculate jump force needed for player
+            float forceNeeded = jumpForce - rb.linearVelocityY;
+            
+            // apply force in y direction of player
+            rb.AddForce(Vector2.up * forceNeeded, ForceMode2D.Impulse);
+            
             jumpRequested = false;
         }
-
-        targetVelocity = AddKnockBackEffect(targetVelocity);
-        
-        targetVelocity = LimitXYSpeed(targetVelocity);
-        rb.linearVelocity = targetVelocity;
-
-        float decay = isGrounded ? 50f : 20f;
-        activeKnockBack.x = Vector2.MoveTowards(activeKnockBack, Vector2.zero, decay * Time.fixedDeltaTime).x;
-        activeKnockBack.y = 0; 
     }
 
-    Vector2 AddKnockBackEffect(Vector2 targetVelocity)
+    void AddKnockbackByType(IKnockbackSource source)
     {
-        targetVelocity = ShotGunKnockBack(targetVelocity);
-        targetVelocity.x += activeKnockBack.x;
-        
-        return targetVelocity;
-    }
-
-    Vector2 ShotGunKnockBack(Vector2 targetVelocity)
-    {
-        if (shotgun.isPressed)
+        if (!source.IsRequesting)
         {
-            // Set shotgun knowckback
-            Vector2 shotForce = shotgun.KnockBackForce;
-
-            // 
-            if (rb.linearVelocityY < -0.1f && shotForce.y > 0)
-            {
-
-                float recoilBonus = Mathf.Abs(rb.linearVelocityY);
-                recoilBonus *= 0.8f; 
-                shotForce.y += recoilBonus;
-                //Debug.Log($"Shotgun Knockback Force: {targetVelocity}");
-            }
-            
-            // Set Y knowckback force
-            targetVelocity.y += shotForce.y;
-
-            // Apply x Force to active Knockback
-            activeKnockBack.x += shotForce.x;
-
-            //  Finish Press mechanism
-            shotgun.FinishePress();
+            return;
         }
-
-        return targetVelocity;
+        rb.AddForce(source.GetForce());
+        source.Consume();
     }
 
-    Vector2 LimitXYSpeed(Vector2 targetVelocity)
-    {
-        targetVelocity.x = Mathf.Clamp( targetVelocity.x, -xSpeedLimit, xSpeedLimit);    
-        targetVelocity.y = Mathf.Clamp( targetVelocity.y, -ySpeedLimit, ySpeedLimit);
+    // Vector2 AddKnockBackEffect(Vector2 targetVelocity)
+    // {
+    //     targetVelocity += ShotGunKnockBack(targetVelocity);
+    //     targetVelocity += SkillKnockBack(targetVelocity);
 
-        return targetVelocity;
-    }    
+    //     return targetVelocity;
+    // }
+
+    // Vector2 ShotGunKnockBack(Vector2 targetVelocity)
+    // {
+    //     if (shotgun.isPressed)
+    //     {
+    //         // Set shotgun knowckback
+    //         Vector2 shotForce = shotgun.KnockBackForce;
+
+    //         // 
+    //         if (rb.linearVelocityY < -0.1f && shotForce.y > 0)
+    //         {
+
+    //             float recoilBonus = Mathf.Abs(rb.linearVelocityY);
+    //             recoilBonus *= 0.8f; 
+    //             shotForce.y += recoilBonus;
+    //             //Debug.Log($"Shotgun Knockback Force: {targetVelocity}");
+    //         }
+            
+    //         // Set Y knowckback force
+    //         targetVelocity.y += shotForce.y;
+
+    //         // Apply x Force to active Knockback
+    //         activeKnockBack.x += shotForce.x;
+
+    //         //  Finish Press mechanism
+    //         shotgun.FinishePress();
+    //     }
+
+    //     return targetVelocity;
+    // }
+
+    // Vector2 SkillKnockBack(Vector2 targetVelocity)
+    // {
+    //     if (playerSkill.isPressed)
+    //     {
+    //         Vector2 skillForce = playerSkill.knockBackForce;
+
+    //         if (rb.linearVelocityY < -0.1f && skillForce.y > 0)
+    //         {
+    //             float recoilBonus = Mathf.Abs(rb.linearVelocityY);
+    //             skillForce.y += recoilBonus;
+    //         }
+
+    //         targetVelocity.y += skillForce.y;
+
+    //         activeKnockBack.x += skillForce.x;
+
+    //         playerSkill.FinishePress();
+    //     }
+
+    //     return targetVelocity;
+    // }
+
+
+
+    void LimitVelocity()
+    {
+        Vector2 v = rb.linearVelocity;
+        // Clamping ensures that even with massive knockbacks, 
+        // the player doesn't phase through walls.
+        v.x = Mathf.Clamp(v.x, -xSpeedLimit, xSpeedLimit);
+        v.y = Mathf.Clamp(v.y, -ySpeedLimit, ySpeedLimit);
+        rb.linearVelocity = v;
+    }
 
     #endregion
 
@@ -168,4 +241,12 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
+}
+
+
+public interface IKnockbackSource
+{
+    bool IsRequesting {get;}
+    Vector2 GetForce();
+    void Consume();
 }

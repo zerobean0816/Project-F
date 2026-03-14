@@ -19,6 +19,12 @@ public class EnemyManager : MonoBehaviour
 
     void Start()
     {
+        currentBoss = GameObject.FindGameObjectWithTag("Boss");
+        if (currentBoss == null)
+        {
+            Debug.Log("[EnemyManager] : Boss is not in scene");
+        }
+
         currentRotate =Quaternion.identity;
     }
 
