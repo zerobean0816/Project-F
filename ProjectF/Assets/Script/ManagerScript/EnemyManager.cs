@@ -1,16 +1,69 @@
+
 using UnityEngine;
+
+public enum BossType
+{
+    Deafult = 0,
+    bossType1
+}
 
 public class EnemyManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] GameObject bossDefault;
+    [SerializeField] GameObject bossType1;
+
+    GameObject currentBoss;
+    Quaternion currentRotate;
+
+
+
     void Start()
     {
-        
+        currentRotate =Quaternion.identity;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void MakeBoss(Vector2 spawnPoint, bool isUp)
     {
+        if (currentBoss != null)
+        {
+            Debug.Log("[EnemyManager] : Trying to make boss that already exist, ignoring commend");
+            return;
+        }
+
+        GetDirection(isUp);
+
+        currentBoss = Instantiate(bossDefault, spawnPoint, currentRotate);
+    }
+
+    public void ChangeBoss( BossType type ,Vector2 spawnPoint, bool isUp)
+    {
+        GameObject prefabToSpawn = bossDefault;
+
+        switch (type)
+        {
+            case BossType.Deafult:
+                prefabToSpawn = bossDefault;
+                break;
+            case BossType.bossType1:
+                prefabToSpawn = bossType1;
+                break;
+        };
         
+        GetDirection(isUp);
+
+        Destroy(currentBoss);
+        currentBoss = Instantiate(prefabToSpawn, spawnPoint, currentRotate);
+    }
+
+    void GetDirection( bool isUp )
+    {
+        if (!isUp)
+        {
+            currentRotate = Quaternion.Inverse(currentRotate);
+        }
+        else
+        {
+            currentRotate = Quaternion.identity;
+        }
     }
 }

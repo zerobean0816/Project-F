@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class ShotgunBullet : MonoBehaviour
@@ -23,9 +22,9 @@ public class ShotgunBullet : MonoBehaviour
     {
         //Debug.Log($"[ShotgunBullet] : Hitted Something {collision.gameObject.name}");
 
+        
 
-
-        if (!collision.gameObject == shotgun)
+        if (collision.gameObject != shotgun && collision.gameObject != playerManager.player)
         {
             ApplyDamageIfEnemyCollide(collision.gameObject);
             Destroy(gameObject);
