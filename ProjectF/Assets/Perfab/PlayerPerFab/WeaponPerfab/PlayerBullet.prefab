@@ -107,6 +107,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShotgunBullet
   bulletSpeed: 50
+  passableLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!50 &5888446082070247013
 Rigidbody2D:
   serializedVersion: 5

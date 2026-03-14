@@ -1,4 +1,5 @@
 
+using System.Collections;
 using UnityEngine;
 
 
@@ -9,19 +10,25 @@ public class EnemyMain : MonoBehaviour
 
     private EnemyLook enemyLook;
     private EnemyGun enemyGun;
-    
+    private Collider2D _collider;
+
+
+    private bool isDead;
     private bool isType2;
 
     void Start()
     {
         enemyLook = GetComponentInChildren<EnemyLook>();
         enemyGun = GetComponentInChildren<EnemyGun>();
+        _collider = gameObject.GetComponentInChildren<Collider2D>();
 
         if (enemyLook == null)
         {
             Debug.Log("[EenemyMain] : enemyLook is missing in perfab, add one new");
             enemyLook = GetComponentInChildren<EnemyLook>();
         }
+
+        isDead = false;
 
         isType2 = (enemyGun == null && enemyLook == null);
         HP = 5;
@@ -30,16 +37,16 @@ public class EnemyMain : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isType2)
+        if (!isType2 && !isDead)
         {
             enemyLook.LookUpdate();
             enemyGun.GunUpdate();
         }
 
-        if (HP <= 0)
+        if (HP <= 0 && !isDead)
         {
-            Debug.Log("[EnemyMain] : Enemy has 0 HP, Destorying..");
-            Destroy(gameObject);
+            isDead = true;
+            StartCoroutine(KillEnemyAfterEffect(.3f));
         }
     }
 
@@ -56,8 +63,18 @@ public class EnemyMain : MonoBehaviour
         HP -= damage;
     }
 
-    void OnDisable()
+    IEnumerator KillEnemyAfterEffect(float duration)
     {
-        Debug.Log("[EnemyMain] : Destroying Conplete");
+        if (_collider != null)
+        {
+            _collider.enabled = false;
+        }
+
+        GameManager.Instance.playerManager.shotGun.AddBullet();
+        GameManager.Instance.playerManager.AddUltValue(10);
+
+        yield return new WaitForSeconds(duration);
+
+        Destroy(gameObject);
     }
 }

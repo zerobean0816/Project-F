@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
@@ -7,10 +6,12 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject playerPrefab;
 
     public GameObject player {get; private set;}
-    public Vector2 playerPos;
     public Rigidbody2D playerRb;
 
     public float stunTime = 2f;
+
+    private const float ULTMAX = 50f;
+    public float ultValue{get; private set;}
     public ShotGun shotGun {get; private set; }
 
     // Player State
@@ -38,12 +39,13 @@ public class PlayerManager : MonoBehaviour
 
         shotGun = player.GetComponentInChildren<ShotGun>();
 
+        ultValue = 0f;
+
         isStuned = false;
     }
 
     public void ManagerUpdate()
     {
-        playerPos = player.transform.position;
     }
 
     // Give Player Knockback with stun, made for enemy bullet, or enemy it self
@@ -93,6 +95,11 @@ public class PlayerManager : MonoBehaviour
         Debug.Log("[PlayerManager] : Stun wore off.");
 
         player.GetComponent<PlayerState>().ResetPlayerColor();
+    }
+
+    public void AddUltValue(float value)
+    {
+        ultValue += value;
     }
 
     void OnDestroy()

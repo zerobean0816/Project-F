@@ -481,7 +481,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyLook
   debugLineIsOn: 1
-  lookRadius: 35
+  lookRadius: 40
   rotationSpeed: 35
 --- !u!114 &530537115138721841
 MonoBehaviour:

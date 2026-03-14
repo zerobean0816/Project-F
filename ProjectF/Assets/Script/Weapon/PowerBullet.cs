@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class PowerBullet : MonoBehaviour
 {
+    [SerializeField] float bulletPower = 500f;
     public int damage {get; private set;}
     public float moveSpeed = 50f;
+
     public LayerMask dontDestoryLayer;
 
     GameObject boss;
@@ -46,7 +48,7 @@ public class PowerBullet : MonoBehaviour
                 Debug.LogError("Boss is missing here");
             }
             Debug.Log("[PowerBullet]: Boss Hitted, Pushing Back");
-            boss.GetComponent<BossMain>().PushBack(200f);
+            boss.GetComponent<BossMain>().PushBack(bulletPower);
             return;
         }
 

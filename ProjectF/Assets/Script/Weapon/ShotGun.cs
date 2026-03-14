@@ -125,8 +125,13 @@ public class ShotGun : MonoBehaviour,IKnockbackSource
             yield return null;
         }
 
-        currentBullet ++;
+        AddBullet();
         isReloading = false;
+    }
+
+    public void AddBullet()
+    {
+        currentBullet ++;
     }
 
     #endregion

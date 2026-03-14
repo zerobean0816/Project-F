@@ -3,6 +3,10 @@ using UnityEngine;
 public class ShotgunBullet : MonoBehaviour
 {
     [SerializeField]float bulletSpeed = 50f;
+
+    public LayerMask passableLayer;
+
+
     PlayerManager playerManager;
     GameObject shotgun;
     EnemyMain otherMain;
@@ -22,7 +26,13 @@ public class ShotgunBullet : MonoBehaviour
     {
         //Debug.Log($"[ShotgunBullet] : Hitted Something {collision.gameObject.name}");
 
+
         if (collision.CompareTag("pBullet"))
+        {
+            return;
+        }
+
+        if ( collision.CompareTag("Passable"))
         {
             return;
         }
