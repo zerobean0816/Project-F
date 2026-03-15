@@ -73,8 +73,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
   playerPrefab: {fileID: 5056669485122258049, guid: fe70e19386c005b44a6d04cbdb755569, type: 3}
-  playerPos: {x: 0, y: 0}
-  stunTime: 0.7
+  playerRb: {fileID: 0}
+  stunTime: 0.6
   _isAlive: 0
 --- !u!114 &4316990910945498796
 MonoBehaviour:

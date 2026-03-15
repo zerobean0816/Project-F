@@ -4,13 +4,13 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     [SerializeField] private GameObject playerPrefab;
+    [SerializeField]public float maxUltValue = 50f;
+
 
     public GameObject player {get; private set;}
     public Rigidbody2D playerRb;
 
     public float stunTime = 2f;
-
-    private const float ULTMAX = 50f;
     public float ultValue{get; private set;}
     public ShotGun shotGun {get; private set; }
 
@@ -46,19 +46,12 @@ public class PlayerManager : MonoBehaviour
 
     public void ManagerUpdate()
     {
+        // No code yet, maybe for status check
+
+        ultValue += Time.deltaTime;
     }
 
-    // Give Player Knockback with stun, made for enemy bullet, or enemy it self
-    public void GivePlayerKnockBack(Transform otherPos, float stunForce)
-    {
-        Vector2 direction = ( player.transform.position - otherPos.position ).normalized;
-
-        playerRb.linearVelocity = Vector2.zero;
-
-        playerRb.AddForce(direction * stunForce);
-        GameManager.Instance.playerManager.GiveStun();
-    }
-
+    // Find Player, if not exist, make one and get player info at awake
     private void InitalizePlayer()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -72,11 +65,14 @@ public class PlayerManager : MonoBehaviour
         is_Alive = true;
     }
 
+
+    // call kill 
     public void KillPlayer()
     {
         is_Alive = false;
     }
 
+    // call stun to player
     public void GiveStun()
     {
         Debug.Log("[PlayerManager] : Player get stunned!");
@@ -85,6 +81,19 @@ public class PlayerManager : MonoBehaviour
         player.GetComponent<PlayerState>().ChangePlayerRed();
 
         StartCoroutine(StunTimeRoutime(stunTime));
+    }
+
+    // Give Player Knockback with stun, made for enemy bullet, or enemy it self
+    public void GivePlayerKnockBack(Transform otherPos, float stunForce)
+    {
+        // get oppsite direciton 
+        Vector2 direction = ( player.transform.position - otherPos.position ).normalized;
+
+        // Reset player rigidbody, making player look like paused for second
+        playerRb.linearVelocity = (playerRb.linearVelocity * 0.1f );
+
+        // Add opposite directional force to player
+        playerRb.AddForce(direction * stunForce);
     }
 
     private IEnumerator StunTimeRoutime(float duration)
@@ -100,6 +109,10 @@ public class PlayerManager : MonoBehaviour
     public void AddUltValue(float value)
     {
         ultValue += value;
+    }
+    public void ResetUltValue()
+    {
+        ultValue = 0f;
     }
 
     void OnDestroy()

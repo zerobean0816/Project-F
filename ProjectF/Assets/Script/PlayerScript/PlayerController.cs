@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+
 using UnityEngine;
 
 [RequireComponent(typeof (Rigidbody2D))]
@@ -26,8 +26,11 @@ public class PlayerController : MonoBehaviour
     // Physics Variables
     private float xAxis;
     private bool jumpRequested;
-    private float xSpeedLimit = 60f;
-    private float ySpeedLimit = 45f;
+    private float xSpeedLimit = 45f;
+    private float ySpeedLimit = 40f;
+
+
+    private float maxUltValue;
 
     public bool isGrounded {get; private set;}
 
@@ -44,6 +47,8 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogError("[PlayerController] : Shotgun is not found in child of Player");
         }
+
+        maxUltValue = GameManager.Instance.playerManager.maxUltValue;
     }
 
 
@@ -54,7 +59,7 @@ public class PlayerController : MonoBehaviour
 
         if (!GameManager.Instance.playerManager.isStuned)
         {   
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) && GameManager.Instance.playerManager.ultValue >= maxUltValue)
             {
                 playerSkill.CallSkill();
             }

@@ -18,6 +18,9 @@ public class PowerBullet : MonoBehaviour
         rb.linearVelocity = transform.right * moveSpeed;
 
         boss = GameManager.Instance.enemyManager.currentBoss;
+        
+        GameManager.Instance.playerManager.shotGun.AddBullet();
+        GameManager.Instance.playerManager.ResetUltValue();
     }
 
     public void SetDamageValue( int damage)

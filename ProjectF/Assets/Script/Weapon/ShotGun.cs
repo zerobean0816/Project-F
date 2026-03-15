@@ -152,12 +152,40 @@ public class ShotGun : MonoBehaviour,IKnockbackSource
     void SetRecoilOnYSpeed(Vector2 offset , out Vector2 finalVector)
     {
         finalVector = offset;
-        if ( playerRb.linearVelocityY < 0f && offset.y > .1f)
+        float bonusYForce = 0f;
+
+        if ( offset.y > .1f)
         {
-            float bonus = Mathf.Abs(playerRb.linearVelocityY) * 0.07f;
-            finalVector.y += bonus;
+            bonusYForce += GetForceBonusByYSpeed(-10f, -80f, 0.08f );
+            bonusYForce += GetFixedByYSpeed(10f, -10f, 1f );
         }
+        finalVector.y += bonusYForce;
     }
+
+    float GetForceBonusByYSpeed(float min, float max, float bonusForce)
+    {
+        float bonus = 0f;
+
+        if ( playerRb.linearVelocityY < min && playerRb.linearVelocityY >= max )
+        {
+            bonus = Mathf.Abs(playerRb.linearVelocityY) * bonusForce;
+        }
+
+        return bonus;
+    }
+
+    float GetFixedByYSpeed(float min, float max, float bonusForce)
+    {
+        float bonus = 0f;
+
+        if ( playerRb.linearVelocityY < min && playerRb.linearVelocityY >= max )
+        {
+            bonus = bonusForce;
+        }
+
+        return bonus;
+    }
+
 
     public void FinishePress()
     {

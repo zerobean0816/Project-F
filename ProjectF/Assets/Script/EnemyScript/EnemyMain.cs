@@ -55,6 +55,7 @@ public class EnemyMain : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             GameManager.Instance.playerManager.GivePlayerKnockBack(transform , stunForce);
+            GameManager.Instance.playerManager.GiveStun();
         }
     }
 
@@ -71,6 +72,8 @@ public class EnemyMain : MonoBehaviour
         }
 
         GameManager.Instance.playerManager.shotGun.AddBullet();
+        GameManager.Instance.playerManager.shotGun.AddBullet();
+
         GameManager.Instance.playerManager.AddUltValue(10);
 
         yield return new WaitForSeconds(duration);

@@ -22,6 +22,7 @@ public class Bullet : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             GameManager.Instance.playerManager.GivePlayerKnockBack(transform , stunForce);
+            GameManager.Instance.playerManager.GiveStun();
             Destroy(gameObject);
             return;
         }

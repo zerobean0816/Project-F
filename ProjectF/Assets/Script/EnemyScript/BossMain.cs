@@ -30,6 +30,8 @@ public class BossMain : MonoBehaviour
         rb.gravityScale = 0;
 
         bossYHeight = transform.localScale.y;
+
+        
     }
 
 
@@ -92,7 +94,7 @@ public class BossMain : MonoBehaviour
 
     public void PushBack(float pushValue)
     {
-        Debug.Log("Pushing Boss Back");
+        //Debug.Log("Pushing Boss Back");
         rb.linearVelocityY *= 0.5f;
         rb.AddForce(Vector2.down * pushValue, ForceMode2D.Impulse);
     }
