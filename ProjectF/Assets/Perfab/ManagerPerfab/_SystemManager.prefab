@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e93bb34d25e08004c97876794c7e96dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  PlatformGeneratorPerfab: {fileID: 817942329771379428, guid: 50c80cf7a5f9c084f893030898859891, type: 3}
 --- !u!114 &5528196438392472904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,7 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67f568b573ffe7347b86590f33545563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiManager
-  bulletText: {fileID: 0}
+  playerCanvas: {fileID: 0}
 --- !u!114 &3170085391828489497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,6 +74,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
   playerPrefab: {fileID: 5056669485122258049, guid: fe70e19386c005b44a6d04cbdb755569, type: 3}
+  maxUltValue: 50
+  startUltValue: 10
   playerRb: {fileID: 0}
   stunTime: 0.6
   _isAlive: 0

@@ -40,18 +40,11 @@ public class PlayerSkill : MonoBehaviour, IKnockbackSource
         Vector2 playerPos = player.transform.position;
         Vector2 mousePOs = GameManager.Instance.mousePos;
         Vector2 oppositeDirection = (playerPos- mousePOs).normalized;
-        AddRecail(oppositeDirection, out Vector2 finalForce);
+        // AddRecail(oppositeDirection, out Vector2 finalForce);
 
-        return finalForce * shootStrength;
+        player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+
+        return oppositeDirection * shootStrength;
     }
 
-    private void AddRecail(Vector2 offset , out Vector2 finalForce)
-    {
-        finalForce = offset;
-
-        if (rb.linearVelocityY < 0 && offset.y > 0.8f)
-        {
-            finalForce.y += (rb.linearVelocityY * -0.1f);
-        }
-    }
 }

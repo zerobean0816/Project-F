@@ -14,7 +14,7 @@ public class BossMain : MonoBehaviour
     [SerializeField] float knowckbackForce = 2000f;
 
     public LayerMask unbreakableLayer;
-
+    public bool isMoving;
 
     private Rigidbody2D rb;
     GameObject player;
@@ -31,7 +31,7 @@ public class BossMain : MonoBehaviour
 
         bossYHeight = transform.localScale.y;
 
-        
+        isMoving = false;
     }
 
 

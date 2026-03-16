@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2171452224622983780}
+  - component: {fileID: 1965888150191731624}
   m_Layer: 0
   m_Name: RandomSpawnPoint
   m_TagString: Untagged
@@ -31,3 +32,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1965888150191731624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8372196816318529168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76a7d81f2b856df4b9864bc58c6bcb69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RandomReward
+  enemy_gun: {fileID: 7470187089395700301, guid: eb9e68674bd0b054fbf1adc210062e00, type: 3}
+  enemy_saw: {fileID: 8723424550625321459, guid: 477d03ff90914c749b3200221fff1437, type: 3}
+  bonusPoint: {fileID: 8217543395236348406, guid: 9d38e12892005794e8b2f8eaddcee8c5, type: 3}

@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
 
         if (!GameManager.Instance.playerManager.isStuned)
         {   
-            if (Input.GetKeyDown(KeyCode.E) && GameManager.Instance.playerManager.ultValue >= maxUltValue)
+            if (Input.GetKeyDown(KeyCode.E) && GameManager.Instance.playerManager.ultValue >= maxUltValue * 0.95)
             {
                 playerSkill.CallSkill();
             }

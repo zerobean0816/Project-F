@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyLook))]
+//[RequireComponent(typeof(EnemyLook))]
 public class EnemyGun : MonoBehaviour
 {
     [SerializeField] public GameObject gun;
@@ -15,7 +15,7 @@ public class EnemyGun : MonoBehaviour
     public bool isIdle {get; private set;}
     GameObject spawnedBullet;
 
-    void Start()
+    public void GunStart()
     {
         enemyLook = GetComponent<EnemyLook>();
         if (enemyLook == null)

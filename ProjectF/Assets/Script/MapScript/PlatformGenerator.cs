@@ -84,7 +84,7 @@ public class PlatformGenerator : MonoBehaviour
         // Make Final stage / goal
         MakeFinalStage();
 
-         Debug.Log("[PlatfromGenerator] : Stage Spawn Complete!");
+        Debug.Log("[PlatfromGenerator] : Stage Spawn Complete!");
     }
 
     void SpawnStartFloor()

@@ -22,7 +22,7 @@ public class EnemyLook : MonoBehaviour
     private Vector2 direction;
 
 
-    void Start()
+    public void LookStart()
     {
         player = GameManager.Instance.playerManager.player;
         enemyGun = GetComponentInChildren<EnemyGun>();

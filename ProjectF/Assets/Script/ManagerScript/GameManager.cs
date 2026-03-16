@@ -2,39 +2,73 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.Cinemachine;
 
-
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+
+    [SerializeField] GameObject PlatformGeneratorPerfab;
 
     [Header("Sub-Managers")]
     public PlayerManager playerManager { get; private set; }
     public UIManager uIManager{ get; private set; }
     public EnemyManager enemyManager { get; private set; }
+    public StageManager stageManager {get; private set;}
     // public SceneManager sceneManager;
 
     [Header("PublicValueGet")] 
     public Vector2 mousePos {get; private set;}
-
-
     private Camera _mainCam;
+
+    bool isGameOver = false;
+    bool isInGame;
 
     void Awake()
     {
         Debug.Log("[GameManager] : Awake is Called");
 
         SetSingletonForGameManager();
-        _mainCam = Camera.main;
-        
-        ConnectSubManagers();
+    }
 
+    void OnEnable()
+    {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
+
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;      
+    }
+
 
     void Update()
     {
         SetMousePosForCamera();
-        CallSubManager_Update();
+
+        if (isInGame)
+        {
+            CallSubManager_Update();
+
+            CheckPlayerDeath();
+        }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        _mainCam = Camera.main;
+
+        if (scene.name == "MenuScene") 
+        {
+            isInGame = false;
+            return;
+        }
+
+        isInGame = true;
+
+        CallSubManager_Awake();
+        SetupCamera(scene);
+
+        Debug.Log("[GameManager] : Loading Platform");
+        Instantiate(PlatformGeneratorPerfab);
     }
 
 
@@ -60,37 +94,35 @@ public class GameManager : MonoBehaviour
     {
         if (playerManager == null)
         {
-            playerManager = GetComponentInChildren<PlayerManager>();
+            playerManager = GetComponent<PlayerManager>();
         }
 
         if (uIManager == null)
         {
-            uIManager = GetComponentInChildren<UIManager>();
+            uIManager = GetComponent<UIManager>();
         }
 
         if (enemyManager == null)
         {
-            enemyManager = GetComponentInChildren<EnemyManager>();
+            enemyManager = GetComponent<EnemyManager>();
+        }
+
+        if (stageManager == null)
+        {
+            stageManager = GetComponent<StageManager>();
         }
     }
 
     void CallSubManager_Awake()
     {
         playerManager.ManagerAwake();
+        stageManager.ManagerAwake();
     }
 
     void CallSubManager_Update()
     {
         playerManager.ManagerUpdate();
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == "ManuMenu") return;
-
-        CallSubManager_Awake();
-
-        SetupCamera(scene);
+        uIManager.ManagerUpdate();
     }
 
     private void SetupCamera(Scene scene)
@@ -111,10 +143,6 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region On Update
-    void CallSubManagerUpdate()
-    {
-        playerManager.ManagerUpdate();
-    }
 
     void SetMousePosForCamera()
     {
@@ -130,26 +158,15 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region  GameState
-    void GameBossReady()
-    {
-        
-    }
 
-    void GameBossAppear()
+    void CheckPlayerDeath()
     {
-        
+        if (!playerManager.is_Alive && !isGameOver)
+        {
+            isGameOver = true;
+            stageManager.GameOver();
+        }
     }
 
     #endregion
-
-    void OnDestroy()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;      
-    }
 }
-
-// public interface ISubManager
-// {
-//     void ManagerAwake();
-//     void ManagerUpdate();
-// }

@@ -1,21 +1,49 @@
-
 using TMPro;
 using UnityEngine;
+
 public class UIManager : MonoBehaviour
 {
-    public TextMeshPro bulletText;
+    [Header("PlayerBasicCanvas")]
+    [SerializeField] GameObject playerCanvas;
+    [SerializeField] GameObject gameOverScreen;
+    [SerializeField] GameObject pausedScreen;
 
-    void Start()
+
+    public bool isPaused;
+
+    public void ManagerAwake()
     {
-        if (bulletText == null)
+        gameOverScreen.SetActive(false);
+        pausedScreen.SetActive(false);
+        isPaused = false;
+    }
+
+    public void ManagerUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.LogError("[UIManager] : bulletTextBox is missing!");
+            isPaused = !isPaused;
         }
+
+
+        ShowPauseSceneByInput();
     }
 
+    // public void SetBulletCount(float count)
+    // {
+       
+    // }
 
-    public void SetBulletCount(float count)
+    public void ShowGameOverScreen()
     {
-        bulletText.text = "Bullet: " + count.ToString();
+        Debug.Log("[UIManager] : Showing GameOverScreen");
+        
+        gameOverScreen.SetActive(true);
     }
+
+    public void ShowPauseSceneByInput()
+    {      
+        pausedScreen.SetActive(isPaused);
+    }
+
 }

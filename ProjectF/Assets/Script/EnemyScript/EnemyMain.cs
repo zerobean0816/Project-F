@@ -11,21 +11,29 @@ public class EnemyMain : MonoBehaviour
     private EnemyLook enemyLook;
     private EnemyGun enemyGun;
     private Collider2D _collider;
-
+    
+    private bool hasNoGun;
 
     private bool isDead;
     private bool isType2;
 
     void Start()
     {
-        enemyLook = GetComponentInChildren<EnemyLook>();
-        enemyGun = GetComponentInChildren<EnemyGun>();
-        _collider = gameObject.GetComponentInChildren<Collider2D>();
+        enemyLook = GetComponent<EnemyLook>();
+        enemyGun = GetComponent<EnemyGun>();
+        _collider = gameObject.GetComponent<Collider2D>();
+
+        hasNoGun = false;
 
         if (enemyLook == null)
         {
-            Debug.Log("[EenemyMain] : enemyLook is missing in perfab, add one new");
-            enemyLook = GetComponentInChildren<EnemyLook>();
+            Debug.Log("[EenemyMain] : enemy has No gun");
+            hasNoGun = true;
+        }
+        else
+        {
+            enemyLook.LookStart();
+            enemyGun.GunStart();
         }
 
         isDead = false;
@@ -37,7 +45,7 @@ public class EnemyMain : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isType2 && !isDead)
+        if (!isType2 && !isDead && !hasNoGun)
         {
             enemyLook.LookUpdate();
             enemyGun.GunUpdate();

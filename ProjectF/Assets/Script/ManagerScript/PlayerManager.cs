@@ -5,6 +5,7 @@ public class PlayerManager : MonoBehaviour
 {
     [SerializeField] private GameObject playerPrefab;
     [SerializeField]public float maxUltValue = 50f;
+    [SerializeField]public float startUltValue = 10f;
 
 
     public GameObject player {get; private set;}
@@ -39,7 +40,7 @@ public class PlayerManager : MonoBehaviour
 
         shotGun = player.GetComponentInChildren<ShotGun>();
 
-        ultValue = 0f;
+        ultValue = startUltValue;
 
         isStuned = false;
     }
@@ -60,6 +61,10 @@ public class PlayerManager : MonoBehaviour
         {
             Debug.Log("[PlayerManager] : Player is Not in Scene, Loading new Player...");
             player = Instantiate(playerPrefab, Vector2.zero, Quaternion.identity);
+        }
+        else
+        {
+            Debug.Log("[PlayerManager] : Player Found inScene!");
         }
 
         is_Alive = true;
