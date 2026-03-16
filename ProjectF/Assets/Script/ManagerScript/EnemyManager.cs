@@ -19,7 +19,7 @@ public class EnemyManager : MonoBehaviour
 
     void Start()
     {
-        currentBoss = GameObject.FindGameObjectWithTag("Boss");
+        currentBoss = GameObject.Find("Boss");
         if (currentBoss == null)
         {
             Debug.Log("[EnemyManager] : Boss is not in scene");

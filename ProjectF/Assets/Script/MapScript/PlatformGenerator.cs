@@ -1,7 +1,6 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public class PlatformGenerator : MonoBehaviour
 {
@@ -9,6 +8,7 @@ public class PlatformGenerator : MonoBehaviour
     [SerializeField] List<GameObject> boxCollection;
     [SerializeField] GameObject wall;
     [SerializeField] GameObject floor;
+    [SerializeField] GameObject startBox;
 
     [Header("")]
     [SerializeField] int firstSpawnCount = 2;
@@ -66,6 +66,8 @@ public class PlatformGenerator : MonoBehaviour
         // Spawn Start Floor
         SpawnStartFloor();
 
+        SpawnStartStage();
+
         // Make First stage
         SpawnStageByInput(firstSpawnCount);
 
@@ -104,6 +106,12 @@ public class PlatformGenerator : MonoBehaviour
             MakeRandomBoxOnVector();
             spawnPoint.y += DefaultHeight;
         }
+    }
+
+    void SpawnStartStage()
+    {
+        Instantiate(startBox, spawnPoint, Quaternion.identity);
+        spawnPoint.y += 40f;
     }
 
     void MakeRandomBoxOnVector()

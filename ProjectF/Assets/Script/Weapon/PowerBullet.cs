@@ -14,17 +14,23 @@ public class PowerBullet : MonoBehaviour
 
     void Start()
     {
+        // Set MoveSpeed of power bullet
         rb = gameObject.GetComponent<Rigidbody2D>();
         rb.linearVelocity = transform.right * moveSpeed;
 
         boss = GameManager.Instance.enemyManager.currentBoss;
         
+        // Add addition buff to player
         GameManager.Instance.playerManager.shotGun.AddBullet();
         GameManager.Instance.playerManager.ResetUltValue();
+
+        // Debug Message
+        Debug.Log("[PowerBullet] : Bullet Spawned!");
     }
 
     public void SetDamageValue( int damage)
     {
+        // Apply Damage
         this.damage = damage;
     }
 
@@ -55,6 +61,9 @@ public class PowerBullet : MonoBehaviour
             return;
         }
 
-        Destroy(collision.gameObject);
+        if (collision != null)
+        {
+            Destroy(collision.gameObject);
+        }
     }
 }

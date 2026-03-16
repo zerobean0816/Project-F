@@ -10,12 +10,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float groundResistnace = 50f;
     [SerializeField] float airResistance = 20f;
 
-
-    [Header("Layer that is Jumpable")]
-    
-    [Header("Get Checkers")]
+    [Header("JumpInfos")]
     [SerializeField] Transform groundChecker;
     public LayerMask jumpableLayer;
+
+    [Header("GunInfo")]
+    [SerializeField] GameObject gunInfo;
+    [SerializeField] GameObject bulletUI;
+    [SerializeField] GameObject skillUI;
+
+    [Header("Gun Enabled")]
+    public bool gunEnalbed = true;
 
     // Reference Variables
     private PlayerSkill playerSkill;
@@ -26,7 +31,7 @@ public class PlayerController : MonoBehaviour
     // Physics Variables
     private float xAxis;
     private bool jumpRequested;
-    private float xSpeedLimit = 45f;
+    private float xSpeedLimit = 50f;
     private float ySpeedLimit = 40f;
 
 
@@ -48,6 +53,14 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("[PlayerController] : Shotgun is not found in child of Player");
         }
 
+        // Gun Enability
+        if (!gunEnalbed)
+        {
+            gunInfo.SetActive(false);
+            bulletUI.SetActive(false);
+            skillUI.SetActive(false);
+        }
+
         maxUltValue = GameManager.Instance.playerManager.maxUltValue;
     }
 
@@ -59,19 +72,22 @@ public class PlayerController : MonoBehaviour
 
         if (!GameManager.Instance.playerManager.isStuned)
         {   
-            if (Input.GetKeyDown(KeyCode.E) && GameManager.Instance.playerManager.ultValue >= maxUltValue * 0.95)
+            if (gunEnalbed)
             {
-                playerSkill.CallSkill();
+                if (Input.GetMouseButtonDown(1) && GameManager.Instance.playerManager.ultValue >= maxUltValue * 0.95)
+                {
+                    playerSkill.CallSkill();
+                }
+        
+                if (Input.GetMouseButtonDown(0) && shotgun.currentBullet > 0)
+                {
+                    shotgun.FireGun();
+                }
             }
 
             if ((Input.GetKeyDown(KeyCode.Space) ) && isGrounded)
             {
                 jumpRequested= true;
-            }
-
-            if (Input.GetMouseButtonDown(0) && shotgun.currentBullet > 0)
-            {
-                shotgun.FireGun();
             }
 
             playerGunRotator.rotatorUpdate();
@@ -100,6 +116,16 @@ public class PlayerController : MonoBehaviour
         LimitVelocity();
     }
     #endregion
+
+    public void EnableGunControl()
+    {
+        gunInfo.SetActive(true);
+        bulletUI.SetActive(true);
+        skillUI.SetActive(true);
+        gunEnalbed = true;
+    }
+
+
 
     #region Physics
 
@@ -223,8 +249,6 @@ public class PlayerController : MonoBehaviour
 
     //     return targetVelocity;
     // }
-
-
 
     void LimitVelocity()
     {

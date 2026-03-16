@@ -52,6 +52,7 @@ MonoBehaviour:
   - {fileID: 2658565249548903314, guid: ff0bbe446deca3f4da9eb09bfd2ef3dc, type: 3}
   wall: {fileID: 8851152355409833831, guid: 33a682e2d51ef93408569f7bab56982c, type: 3}
   floor: {fileID: 8480828238231495277, guid: 6a792da37c2e7734e99d6c75b2b7dcc0, type: 3}
+  startBox: {fileID: 4782715394580475387, guid: 13bd0023dcd773742ba45d3b340d1a03, type: 3}
   firstSpawnCount: 2
   secondSpawnCount: 3
   thirdSpawnCount: 4

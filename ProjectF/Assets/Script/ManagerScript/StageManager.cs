@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -39,11 +40,11 @@ public class StageManager : MonoBehaviour
         uiManager.ShowGameOverScreen();
     }
 
-    public void GameStart()
+    public void CallMenu()
     {
-        Debug.Log("[Stage Manager] : Game has started");
+        Debug.Log("[Stage Manager] : Game Menu called");
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("MenuScene");
     }
 
     public void CallTutorial()
@@ -67,9 +68,22 @@ public class StageManager : MonoBehaviour
         uiManager.ShowPauseSceneByInput();
     }
 
-    public void ExitGame()
+    public void CallESC()
     {
-        Debug.Log("[StageManaer] : Quiting Game");
-        Application.Quit();
+        uiManager.CallESC();
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void CallStart()
+    {
+        Debug.Log("[Stage Manager] : Game Main called");
+        Time.timeScale = 1f;
+        GameManager.Instance.playerManager.player.GetComponent<PlayerController>().gunEnalbed = true;
+        SceneManager.LoadScene("MainScene");
     }
 }

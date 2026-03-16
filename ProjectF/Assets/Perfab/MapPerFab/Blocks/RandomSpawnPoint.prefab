@@ -46,4 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RandomReward
   enemy_gun: {fileID: 7470187089395700301, guid: eb9e68674bd0b054fbf1adc210062e00, type: 3}
   enemy_saw: {fileID: 8723424550625321459, guid: 477d03ff90914c749b3200221fff1437, type: 3}
-  bonusPoint: {fileID: 8217543395236348406, guid: 9d38e12892005794e8b2f8eaddcee8c5, type: 3}
+  bonusPoint: {fileID: 5909241239411281040, guid: 7ebd0886f3c7e33429280267361417d9, type: 3}

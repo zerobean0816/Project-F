@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 3783075646608520401}
   - component: {fileID: 6134521352454823418}
   - component: {fileID: 3878022177726141512}
-  - component: {fileID: 8829269991150108000}
   m_Layer: 0
   m_Name: PowerBullet
   m_TagString: Untagged
@@ -30,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 6447894943511846450}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -21.6, y: 5.05864, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -107,6 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 518b118ce41445646bcdedc499a9c8cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerBullet
+  bulletPower: 250
   moveSpeed: 60
   dontDestoryLayer:
     serializedVersion: 2
@@ -174,20 +174,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &8829269991150108000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6447894943511846450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Postprocessing.Runtime::UnityEngine.Rendering.PostProcessing.PostProcessVolume
-  sharedProfile: {fileID: 11400000, guid: 32080cf2d5bfada40ac0d1d4d04850c4, type: 2}
-  isGlobal: 0
-  blendDistance: 0
-  weight: 1
-  priority: 0

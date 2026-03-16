@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.Cinemachine;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -70,11 +71,12 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("[GameManager] : Set state to Menu");
             isInGame = false;
+            uIManager.ReconnectUI();
             uIManager.CloseAllUI();
             return;
         }
 
-
+        isGameOver = false;
         Debug.Log("[GameManager] : Set state to In Game");
 
         ConnectSubManagers();
@@ -95,17 +97,27 @@ public class GameManager : MonoBehaviour
     #region On Game Manager Awake
     void SetSingletonForGameManager()
     {
-        // Singleton Protection
-        if (Instance != null && Instance != this)
-        {
-            Debug.LogError("[GameManager] : Instance has gameobject that is not this, Destroying gameobject");
-            Destroy(gameObject);
-            return;
-        }
+        // // Singleton Protection
+        // if (Instance != null && Instance != this)
+        // {
+        //     Debug.Log("[GameManager] : Instance has gameobject that is not this, Destroying gameobject");
+        //     Destroy(gameObject);
+        //     return;
+        // }
 
-        Debug.Log("[GameManager] : Creating singleton to gameManager");
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        // Debug.Log("[GameManager] : Creating singleton to gameManager");
+        // Instance = this;
+        // DontDestroyOnLoad(gameObject);
+
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Keep this object alive between scenes
+        }
+        else
+        {
+            Destroy(gameObject); // Kill duplicates that spawn when returning to the scene
+        }
     }
     #endregion
 

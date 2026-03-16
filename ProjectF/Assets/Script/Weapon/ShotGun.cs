@@ -15,6 +15,7 @@ public class ShotGun : MonoBehaviour,IKnockbackSource
     [SerializeField] GameObject bullet1UI;
     [SerializeField] GameObject bullet2UI;
     [SerializeField] GameObject bullet3UI;
+    [SerializeField] GameObject bullet4UI;
 
     [Header("Perfab")]
     [SerializeField] GameObject bulletPerFab;
@@ -69,10 +70,15 @@ public class ShotGun : MonoBehaviour,IKnockbackSource
     // Update is called once per frame
     public void ReloadWhenEmpty()
     {
-        if (currentBullet < maxAmmo && player.GetComponent<PlayerController>().isGrounded)
+        if (currentBullet < maxAmmo )
         {
             StartCoroutine(ReloadOnTime(reloadTime));
         }
+
+        // if (currentBullet < maxAmmo && player.GetComponent<PlayerController>().isGrounded)
+        // {
+        //     StartCoroutine(ReloadOnTime(reloadTime));
+        // }
     }
     
     public void FireGun()
@@ -105,6 +111,7 @@ public class ShotGun : MonoBehaviour,IKnockbackSource
         bullet1UI.SetActive(currentBullet >= 1);
         bullet2UI.SetActive(currentBullet >= 2);
         bullet3UI.SetActive(currentBullet >= 3);
+        bullet4UI.SetActive(currentBullet >= 4);
     }
 
     private IEnumerator ReloadOnTime(float duration)
@@ -115,11 +122,11 @@ public class ShotGun : MonoBehaviour,IKnockbackSource
         reloadTimer = 0;
         while (reloadTimer < duration)
         {
-            if (!player.GetComponent<PlayerController>().isGrounded)
-            {
-                isReloading = false;
-                yield break;
-            }
+            // if (!player.GetComponent<PlayerController>().isGrounded)
+            // {
+                //isReloading = false;
+                //yield break;
+            //}
 
             reloadTimer += Time.deltaTime;
             yield return null;

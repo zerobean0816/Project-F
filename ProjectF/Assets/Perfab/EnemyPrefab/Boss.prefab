@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.10196, y: -90.334816, z: 0}
-  m_LocalScale: {x: 46.79643, y: 95.74285, z: 51.40556}
+  m_LocalScale: {x: 49, y: 100, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -152,16 +152,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3d649685cad76c4e9f1714ba90bf4d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossMain
-  slowSpeed: 5
+  slowSpeed: 7
   normalSpeed: 9
-  fastSpeed: 13
+  fastSpeed: 11
   acceleration: 10
   slowDistance: 20
   catchUpDistance: 50
-  knowckbackForce: 2000
   unbreakableLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3072
+  isMoving: 0
 --- !u!50 &7677835739721275847
 Rigidbody2D:
   serializedVersion: 5

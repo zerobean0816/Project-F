@@ -5,13 +5,14 @@ public class UIManager : MonoBehaviour
 {
     [Header("PlayerBasicCanvas")]
     [SerializeField] GameObject gameUICanvas;
+    [SerializeField] GameObject menuUICanvas;
     [SerializeField] GameObject gameOverScreen;
     [SerializeField] GameObject pausedScreen;
     [SerializeField] GameObject gameClearScreen;
 
 
     public bool isPaused;
-
+    
     public void ManagerAwake()
     {
         Debug.Log("[UIManager] : UI Manager is Awaked, turing screen off");
@@ -23,12 +24,16 @@ public class UIManager : MonoBehaviour
         isPaused = false;
     }
 
+    public void ReconnectUI()
+    {
+        menuUICanvas = GameObject.Find("MainMenuCanvas");
+    }
+
     public void ManagerUpdate()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            isPaused = !isPaused;
-            GameManager.Instance.stageManager.GamePause();
+            CallESC();
         }
     }
 
@@ -59,5 +64,12 @@ public class UIManager : MonoBehaviour
     public void CloseAllUI()
     {
         gameUICanvas.SetActive(false);
+    }
+
+    public void CallESC()
+    {
+        isPaused = !isPaused;
+        Time.timeScale = 1f;
+        GameManager.Instance.stageManager.GamePause();
     }
 }
