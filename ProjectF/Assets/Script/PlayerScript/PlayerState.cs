@@ -14,13 +14,13 @@ public class PlayerState : MonoBehaviour
 
     public void ChangePlayerRed()
     {
-        Debug.Log("[PlayerState] : Changing Player to Red..");
+        //Debug.Log("[PlayerState] : Changing Player to Red..");
         playerBodySprite.color = Color.red;
     }
 
     public void ResetPlayerColor()
     {
-        Debug.Log("[PlayerState] : Reset Player Color");
+        //Debug.Log("[PlayerState] : Reset Player Color");
         playerBodySprite.color = Color.gray;
     }
 }

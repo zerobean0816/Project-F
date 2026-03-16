@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [SerializeField] GameObject PlatformGeneratorPerfab;
+    [SerializeField] CinemachineCamera cinemachineCameraPrefab;
 
     [Header("Sub-Managers")]
     public PlayerManager playerManager { get; private set; }
@@ -27,6 +28,11 @@ public class GameManager : MonoBehaviour
         Debug.Log("[GameManager] : Awake is Called");
 
         SetSingletonForGameManager();
+
+        if (Instance == this)
+        {
+            ConnectSubManagers();
+        }
     }
 
     void OnEnable()
@@ -42,33 +48,47 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        SetMousePosForCamera();
-
-        if (isInGame)
+        if (!isInGame) 
         {
-            CallSubManager_Update();
-
-            CheckPlayerDeath();
+            return;   
         }
+        if (_mainCam == null)
+        {
+            Debug.Log("[GameManger] : Camera missing, possibly camera has wrong Tag");
+        }
+
+        SetMousePosForCamera();
+        CallSubManager_Update();
+        CheckPlayerDeath();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         _mainCam = Camera.main;
-
+    
         if (scene.name == "MenuScene") 
         {
+            Debug.Log("[GameManager] : Set state to Menu");
             isInGame = false;
+            uIManager.CloseAllUI();
             return;
         }
 
+
+        Debug.Log("[GameManager] : Set state to In Game");
+
+        ConnectSubManagers();
         isInGame = true;
 
         CallSubManager_Awake();
         SetupCamera(scene);
 
+        if (scene.name != "TutorialScene")
+        {
+            Instantiate(PlatformGeneratorPerfab);
+        }
+
         Debug.Log("[GameManager] : Loading Platform");
-        Instantiate(PlatformGeneratorPerfab);
     }
 
 
@@ -115,28 +135,37 @@ public class GameManager : MonoBehaviour
 
     void CallSubManager_Awake()
     {
+        Debug.Log("[GameManager] : Waking sub- Managers");
         playerManager.ManagerAwake();
         stageManager.ManagerAwake();
+        uIManager.ManagerAwake();
     }
 
     void CallSubManager_Update()
     {
         playerManager.ManagerUpdate();
+        stageManager.ManagerUpdate();
         uIManager.ManagerUpdate();
     }
 
     private void SetupCamera(Scene scene)
     {
         CinemachineCamera vCam = FindFirstObjectByType<CinemachineCamera>();
+
         if (vCam != null && playerManager.player != null)
         {
             vCam.Follow = playerManager.player.transform;
             vCam.LookAt = playerManager.player.transform;
+            vCam.Lens.OrthographicSize = 22f;
             Debug.Log("[GameManager] : Camera Linked With player");
         }
         else
         {
-            Debug.LogError("[GameManager] : Camera failed to Link to player");
+            Debug.Log("[GameManager] : Camera failed to Link to player");
+            vCam = Instantiate(cinemachineCameraPrefab);
+            vCam.Follow = playerManager.player.transform;
+            vCam.LookAt = playerManager.player.transform;
+            vCam.Lens.OrthographicSize = 22f;
         }
     }
 
@@ -149,9 +178,11 @@ public class GameManager : MonoBehaviour
         if (_mainCam != null)
         {
             mousePos= _mainCam.ScreenToWorldPoint(Input.mousePosition);
+            //Debug.Log(mousePos);
         }
         else
         {
+            Debug.Log("[GameManager] : Failed to load Camera, setting Cmara again");
             _mainCam = Camera.main;
         }
     }

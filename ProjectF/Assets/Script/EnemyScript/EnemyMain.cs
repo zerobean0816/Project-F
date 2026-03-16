@@ -27,7 +27,7 @@ public class EnemyMain : MonoBehaviour
 
         if (enemyLook == null)
         {
-            Debug.Log("[EenemyMain] : enemy has No gun");
+            //Debug.Log("[EenemyMain] : enemy has No gun");
             hasNoGun = true;
         }
         else

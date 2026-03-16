@@ -13,7 +13,11 @@ public class StageManager : MonoBehaviour
 
         uiManager = GetComponent<UIManager>();
         NullChecker.IsNULL(uiManager);
+    }
 
+    public void ManagerUpdate()
+    {
+        
     }
 
     public void StopBoss()
@@ -39,12 +43,33 @@ public class StageManager : MonoBehaviour
     {
         Debug.Log("[Stage Manager] : Game has started");
         Time.timeScale = 1f;
+        SceneManager.LoadScene("MainScene");
+    }
+
+    public void CallTutorial()
+    {
+        Debug.Log("[Stage Manager] : Game has started");
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("TutorialScene");
     }
 
     public void GameClear()
     {
         Debug.Log("[Stage Manager] : Player has win the game");
         Time.timeScale = 0f;
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); 
+        uiManager.ShowGameClearScreen();
+    }
+
+    public void GamePause()
+    {
+        Debug.Log("[Stage Manager] : Player has win the game");
+        Time.timeScale = 0f;
+        uiManager.ShowPauseSceneByInput();
+    }
+
+    public void ExitGame()
+    {
+        Debug.Log("[StageManaer] : Quiting Game");
+        Application.Quit();
     }
 }

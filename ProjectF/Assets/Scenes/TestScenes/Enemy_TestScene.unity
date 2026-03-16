@@ -4738,6 +4738,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3753896644132225947, guid: 6ea2e261de034284f85d6cdfe6d88fba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4625088182940197471, guid: 6ea2e261de034284f85d6cdfe6d88fba, type: 3}
       propertyPath: m_Name
       value: _SystemManager
@@ -5059,6 +5063,14 @@ PrefabInstance:
     - target: {fileID: 5056669485122258049, guid: fe70e19386c005b44a6d04cbdb755569, type: 3}
       propertyPath: m_Name
       value: PlayerMain
+      objectReference: {fileID: 0}
+    - target: {fileID: 7322968053190123286, guid: fe70e19386c005b44a6d04cbdb755569, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7322968053190123286, guid: fe70e19386c005b44a6d04cbdb755569, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7658963849581405004, guid: fe70e19386c005b44a6d04cbdb755569, type: 3}
       propertyPath: m_LocalPosition.x

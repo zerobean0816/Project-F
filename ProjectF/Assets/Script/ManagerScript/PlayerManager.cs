@@ -56,7 +56,6 @@ public class PlayerManager : MonoBehaviour
     private void InitalizePlayer()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        playerRb = player.GetComponent<Rigidbody2D>();
         if (player == null)
         {
             Debug.Log("[PlayerManager] : Player is Not in Scene, Loading new Player...");
@@ -66,6 +65,8 @@ public class PlayerManager : MonoBehaviour
         {
             Debug.Log("[PlayerManager] : Player Found inScene!");
         }
+
+        playerRb = player.GetComponent<Rigidbody2D>();
 
         is_Alive = true;
     }
@@ -106,7 +107,7 @@ public class PlayerManager : MonoBehaviour
         yield return new WaitForSeconds(duration);
 
         isStuned = false;
-        Debug.Log("[PlayerManager] : Stun wore off.");
+        //Debug.Log("[PlayerManager] : Stun wore off.");
 
         player.GetComponent<PlayerState>().ResetPlayerColor();
     }

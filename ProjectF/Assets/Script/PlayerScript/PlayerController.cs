@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
 
 
     #region Basic Process
-    void Awake()
+    void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         shotgun = GetComponentInChildren<ShotGun>();
