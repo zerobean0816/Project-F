@@ -2,15 +2,16 @@ using UnityEngine;
 
 public class TutorialBossTrigger : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] GameObject bossPerfab;
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if(collision.gameObject.tag == "Player")
+        {
+            Debug.Log("BossSpawned============");
+            Vector2 startPos = new Vector2(30f,260f);
+            GameObject boss = Instantiate(bossPerfab, startPos, Quaternion.Euler(0,0,-90));
+            GameManager.Instance.enemyManager.currentBoss = boss;
+            boss.transform.localScale = new Vector3 (15f, 60f, 1f);
+        }
     }
 }

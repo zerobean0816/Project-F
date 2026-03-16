@@ -12,14 +12,14 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] GameObject bossDefault;
     [SerializeField] GameObject bossType1;
 
-    public GameObject currentBoss {get; private set;}
+    public GameObject currentBoss;
     public Quaternion currentRotate {get; private set;}
 
 
 
     void Start()
     {
-        currentBoss = GameObject.Find("Boss");
+        currentBoss = GameObject.FindGameObjectWithTag("Boss");
         if (currentBoss == null)
         {
             Debug.Log("[EnemyManager] : Boss is not in scene");

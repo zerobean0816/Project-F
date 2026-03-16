@@ -16,6 +16,7 @@ public class BossMain : MonoBehaviour
 
     public LayerMask unbreakableLayer;
     public bool isMoving;
+    public bool isX = false;
 
     private Rigidbody2D rb;
     GameObject player;
@@ -40,38 +41,76 @@ public class BossMain : MonoBehaviour
     {
         if (isMoving)
         {
+            if (isX)
+            {
+                MoveBossX();
+                return;
+            }
             MoveBoss();
         }
     }
 
     void MoveBoss()
     {
-    // 1. Get the direction the boss is currently facing (its "Up" direction)
         Vector2 forwardDirection = transform.up;
 
-        // 2. Calculate distance logic (keep your player height check)
-        float absDistance = 0;
+        float relativeDistance = 0;
         if (player != null)
         {
-            Vector2 bossOffset = (Vector2)transform.position + ((Vector2)transform.up * (bossYHeight / 2));
-            absDistance = Mathf.Abs(player.transform.position.y - bossOffset.y);
+            // 1. Get the vector from Boss to Player
+            Vector2 toPlayer = (Vector2)player.transform.position - (Vector2)transform.position;
+
+            // 2. PROJECT that vector onto the Boss's local 'Up' axis
+            // This gives you the distance "in front" of the boss, even if he is rotated
+            relativeDistance = Vector2.Dot(toPlayer, forwardDirection);
         }
 
-        // 3. Determine speed based on distance (Rubber-banding)
+        // 3. Determine speed based on distance (Logic stays the same)
         float desiredSpeed;
-        if (player == null)                     desiredSpeed = normalSpeed;
-        else if (absDistance < slowDistance)    desiredSpeed = slowSpeed;
-        else if (absDistance < catchUpDistance) desiredSpeed = normalSpeed;
-        else if (absDistance < catchUpDistance + 20f) desiredSpeed = fastSpeed;
-        else                                    desiredSpeed = fastestSpeed;
+        if (player == null)                                  desiredSpeed = normalSpeed;
+        else if (relativeDistance < slowDistance)           desiredSpeed = slowSpeed;
+        else if (relativeDistance < catchUpDistance)        desiredSpeed = normalSpeed;
+        else if (relativeDistance < catchUpDistance + 20f) desiredSpeed = fastSpeed;
+        else                                                desiredSpeed = fastestSpeed;
 
-        // 4. Calculate the Target Velocity
-        // This multiplies the direction the boss is pointing by the speed
+        // 4. Calculate the Target Velocity (Local Direction * Speed)
         Vector2 targetVelocity = forwardDirection * desiredSpeed;
 
-        // 5. Apply Force to reach that velocity
+        // 5. Apply Force
         Vector2 velocityDelta = targetVelocity - rb.linearVelocity;
         rb.AddForce(velocityDelta * acceleration);
+    }
+
+    void MoveBossX()
+    {
+        Vector2 forwardDirection = transform.up;
+
+        float relativeDistance = 0;
+        if (player != null)
+        {
+            // 1. Get the vector from Boss to Player
+            Vector2 toPlayer = (Vector2)player.transform.position - (Vector2)transform.position;
+
+            // 2. PROJECT that vector onto the Boss's local 'Up' axis
+            // This gives you the distance "in front" of the boss, even if he is rotated
+            relativeDistance = Vector2.Dot(toPlayer, forwardDirection);
+        }
+
+        // 3. Determine speed based on distance (Logic stays the same)
+        float desiredSpeed;
+        if (player == null)                                  desiredSpeed = 15f;
+        else if (relativeDistance < slowDistance)           desiredSpeed = 15f;
+        else if (relativeDistance < catchUpDistance)        desiredSpeed = 21f;
+        else if (relativeDistance < catchUpDistance + 20f) desiredSpeed = 25f;
+        else                                                desiredSpeed = 30f;
+
+        // 4. Calculate the Target Velocity (Local Direction * Speed)
+        Vector2 targetVelocity = forwardDirection * desiredSpeed;
+
+        // 5. Apply Force
+        Vector2 velocityDelta = targetVelocity - rb.linearVelocity;
+        rb.AddForce(velocityDelta * acceleration);
+
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -94,9 +133,8 @@ public class BossMain : MonoBehaviour
 
     public void PushBack(float pushValue)
     {
-        //Debug.Log("Pushing Boss Back");
-        rb.linearVelocityY *= 0.5f;
-        rb.AddForce(Vector2.down * pushValue, ForceMode2D.Impulse);
+        // Use -transform.up to push back exactly opposite of where the boss is facing
+        rb.AddForce(-transform.up * pushValue, ForceMode2D.Impulse);
     }
 
 
